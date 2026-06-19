@@ -1,0 +1,137 @@
+@import "../../fonts/vazir/font-face.css";
+body{
+    font-family: Vazir;
+    font-size: 13px;
+}
+.sidebar-dark {
+    background-color: #32323A;
+}
+.sidebar-logo {
+    background-color: #28282e;
+}
+.sidebar-user{
+    background-color: #28282e;
+    height: 80px;
+    margin-bottom: 90px;
+}
+.profile-user-info {
+    position: relative;
+    padding: 20px;
+    text-align: center;
+}
+.profile-avatar {
+    width: 100px;
+    position: relative;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+.site-title,.site-title:hover {
+    color: #fff;
+}
+.nav-sidebar li a {
+    color: rgba(255, 255, 255, .9);
+    display: block;
+    -webkit-transition: background 0.15s linear, color 0.15s linear;
+    -o-transition: background 0.15s linear, color 0.15s linear;
+    transition: background 0.15s linear, color 0.15s linear;
+}
+.nav-sidebar .nav-link:focus, .nav-sidebar .nav-link:hover,
+.nav-sidebar li a:hover,
+.nav-sidebar li a:focus {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+.nav-sidebar .nav-item-open>.nav-link:not(.disabled):not(:active), .nav-sidebar>.nav-item-expanded>.nav-link:not(:active) {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+.nav-sidebar .nav-link.active {
+    background-color: rgba(0, 0, 0, .15);
+}
+.nav-sidebar > li.active > a,
+.nav-sidebar > li.active > a:hover,
+.nav-sidebar > li.active > a:focus {
+    background-color: #28282e;
+    color: #fff;
+}
+.nav-group-sub {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+.nav-sidebar .nav-item {
+    position: relative;
+    border-bottom: 1px #3b3b43 solid;
+}
+.nav-sidebar .nav-item:not(.nav-item-divider) {
+    margin-bottom: 0;
+}
+.nav-sidebar .nav-item:not(.nav-item-header):last-child {
+    padding:unset;
+    border-bottom: 0;
+}
+
+.nav-sidebar li:nth-child(1) a > i {
+    color: #d24674 !important;
+}
+.nav-sidebar li:nth-child(2) a > i {
+    color: #d24674 !important;
+}
+.nav-sidebar li:nth-child(3) a > i {
+    color: #b846cd !important;
+}
+.nav-sidebar li:nth-child(4) a > i {
+    color: #8755da !important;
+}
+.nav-sidebar li:nth-child(5) a > i {
+    color: #5265cb !important;
+}
+.nav-sidebar li:nth-child(6) a > i {
+    color: #2196f3 !important;
+}
+.nav-sidebar li:nth-child(7) a > i {
+    color: #228fc1 !important;
+}
+.nav-sidebar li:nth-child(8) a > i {
+    color: #00bcd4 !important;
+}
+.nav-sidebar li:nth-child(9) a > i {
+    color: #009688 !important;
+}
+.nav-sidebar li:nth-child(10) a > i {
+    color: #8bc34a !important;
+}
+.nav-sidebar li:nth-child(11) a > i {
+    color: #cddc39 !important;
+}
+.nav-sidebar li:nth-child(12) a > i {
+    color: #ffeb3b !important;
+}
+.nav-sidebar li:nth-child(13) a > i {
+    color: #ff9800 !important;
+}
+.nav-sidebar li:nth-child(14) a > i {
+    color: #ff5722 !important;
+}
+.nav-sidebar li:nth-child(15) a > i {
+    color: #ffc107 !important;
+}
+.nav-sidebar li:nth-child(16) a > i {
+    color: #795548 !important;
+}
+.nav-sidebar > li.active > a > i {
+    color: #fff !important;
+}
+.nav-sidebar .nav-link i {
+    margin-left: 1.25rem;
+    margin-top: 0.12502rem;
+    margin-bottom: 0.12502rem;
+    font-size:1rem;
+    top: 0;
+}
+.nav-sidebar > .nav-item > .nav-link {
+    font-weight: normal;
+}
+
+.text-muted {
+    color: #999 !important;
+}

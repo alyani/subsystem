@@ -1,0 +1,342 @@
+.title-box {
+    position: absolute;
+    top: 7px;
+    right: 10px;
+    transform: translateY(-100%);
+    background-color: #3f4749;
+    color: white;
+    padding: 5px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 1;
+}
+
+.customer-info, .address-info {
+    position: relative;
+    padding-right: 60px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    #printSection {
+        display: block;
+    }
+}
+
+.invoice p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+#top-alert {
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 18px;
+    max-width: 600px;
+    padding: 20px 40px;
+}
+
+.select2-container--bootstrap4 .select2-selection--single {
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.select2-container--bootstrap4 .select2-selection__rendered {
+    line-height: 1.5;
+}
+
+.select2-container--bootstrap4 .select2-selection__arrow {
+    height: 100%;
+}
+
+.form-control, .select2-container--bootstrap4 .select2-selection--single {
+    height: calc(2.25rem + 2px);
+    padding: 0.375rem 0.75rem;
+}
+
+.card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-control {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.control-label {
+    color: #333333;
+    font-weight: bold;
+}
+
+.image-datatable {
+    width: 80px;
+    height: 80px;
+    border-radius: 15px;
+}
+
+.table-space {
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+.invoice-form {
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+.table-space th {
+    background-color: #3f4749;
+    color: white;
+}
+
+.table.dataTable thead th {
+    background-color: rgba(59, 71, 75, 0.7);
+    color: white;
+}
+
+.table-space th, .table-space td {
+    padding: 5px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table td, .table th {
+    padding: 10px;
+    text-align: center;
+}
+
+.dataTables_wrapper {
+    position: relative;
+    min-height: 80px;
+}
+
+.index-dataTables_length {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    direction: rtl;
+}
+
+.index-dataTables_length label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: #333;
+}
+
+.index-dataTables_length select {
+    padding: 5px 10px;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    font-size: 13px;
+    min-width: 80px;
+}
+
+.admin-soft-table-card {
+    background-color: #fdfefe;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    padding: 30px;
+    margin-top: 40px;
+    border: 1px solid #e0e7ef;
+}
+
+.admin-table-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #1f2937;
+    border-bottom: 2px solid #dbeafe;
+    padding-bottom: 10px;
+}
+
+.soft-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    color: #374151;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.soft-table thead {
+    background: linear-gradient(to right, #e0f2fe, #dbeafe);
+}
+
+.soft-table thead th {
+    padding: 14px;
+    text-align: center;
+    font-weight: 700;
+    color: #1e3a8a;
+    border-bottom: 2px solid #cbd5e1;
+    white-space: nowrap;
+}
+
+.soft-table tbody td {
+    padding: 12px;
+    text-align: center;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    font-weight: 500;
+}
+
+.soft-table tbody tr:nth-child(even) td {
+    background-color: #f9fafb;
+}
+
+.soft-table tbody tr:hover {
+    background-color: #f0f9ff;
+    transition: all 0.2s ease-in-out;
+}
+
+.soft-table .btn {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+}
+
+.soft-table .btn-edit {
+    background-color: #e0f2fe;
+    color: #0284c7;
+    border: 1px solid #bae6fd;
+}
+
+.soft-table .btn-edit:hover {
+    background-color: #bae6fd;
+}
+
+.soft-table .btn-delete {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.soft-table .btn-delete:hover {
+    background-color: #fecaca;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 6px 10px;
+    background-color: #f9fafb;
+    font-size: 13px;
+    color: #374151;
+}
+
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    color: #4b5563;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background-color: #e5e7eb;
+    color: #1f2937 !important;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    margin: 2px;
+    padding: 5px 10px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #cbd5e1;
+}
+
+@media screen and (max-width: 768px) {
+    .soft-table thead {
+        display: none;
+    }
+
+    .soft-table,
+    .soft-table tbody,
+    .soft-table tr,
+    .soft-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .soft-table tr {
+        margin-bottom: 1rem;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px 0;
+    }
+
+    .soft-table td {
+        padding: 12px 16px 12px 100px;
+        position: relative;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        color: #111;
+    }
+
+    .soft-table td::before {
+        content: attr(data-label);
+        position: absolute;
+        right: 16px;
+        top: 12px;
+        font-weight: bold;
+        color: #666;
+        white-space: nowrap;
+    }
+}
+
+.btn-gradient {
+    background: linear-gradient(to right, #4e54c8, #8f94fb);
+    color: white;
+    border: none;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-gradient:hover {
+    background: linear-gradient(to right, #3b40a0, #7d83f0);
+    transform: translateY(-2px);
+}
+
+.left-to-right,
+.password-input,
+.mobile-input,
+.county-code-input,
+.phone-input {
+    direction: ltr;
+}

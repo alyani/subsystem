@@ -1,0 +1,77 @@
+<?php
+
+namespace Alyani\Subsystem\Console\Commands;
+
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+
+class CreateDatatableCommand extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'make:datatable {filename? : The name of the file to create.}';
+    protected string $fileName;
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Create a new datatable.';
+
+    /**
+     * Execute the console command.
+     */
+    //
+
+    public function handle()
+    {
+        $directoryPath = base_path() . "/app/DataTables/";
+
+        // Check the filename exists or not. (if not, it will return a failure)
+        if (!$this->argument('filename')) {
+            $input = $this->ask('What is the name of datatable? e.g. UserDatatable');
+            if (!$input) {
+                $this->error('The datatable name cannot be empty.');
+                return Command::FAILURE;
+            }
+            $this->fileName = pathinfo($input, PATHINFO_FILENAME);
+        } else {
+            $this->fileName = pathinfo($this->argument('filename'), PATHINFO_FILENAME);
+        }
+
+        $filePath = $directoryPath . $this->fileName . ".php";
+
+        // Check the destination folder exists on not. (if not, it will create.)
+        if (!file_exists($directoryPath)) {
+            mkdir($directoryPath, 0755, true);
+        }
+
+        // Check is the file exists on destination path or not. (if existed, it will return a failure)
+        if (file_exists($filePath)) {
+            $this->error("The file '{$this->fileName}.php' already exists.");
+            return Command::FAILURE;
+        }
+
+        // Create the datatable
+        File::put($filePath, $this->getDatatableTemplate());
+
+        $this->info("Datatable [{$filePath}] created successfully.");
+        return Command::SUCCESS;
+    }
+
+    /*
+     * Return a datatable template based on model
+     */
+    public function getDatatableTemplate(): string
+    {
+        // Extract the model name
+        preg_match('/(\w+)(?=Datatable)/', $this->fileName, $matches);
+        $modelName = ucfirst(($matches[1] ?? ''));
+
+        return "<?php\n\nnamespace App\\DataTables;\n\nuse Illuminate\\Database\\Eloquent\\Builder as QueryBuilder;\nuse Alyani\\Subsystem\\DataTables\\DataTable;\nuse Yajra\\DataTables\\EloquentDataTable;\nuse Yajra\\DataTables\\Html\\Column;\nuse App\\Models\\{$modelName};\n\nclass $this->fileName extends DataTable\n{\n    /**\n     * Build the DataTable class.\n     *\n     * @param QueryBuilder \$query Results from query() method.\n     */\n    public function dataTable(QueryBuilder \$query): EloquentDataTable\n    {\n        return (new EloquentDataTable(\$query))\n            ->filter(function (\$query) {\n                return \$query;\n            })\n//            ->addColumn('name#1', function (\$model) {\n//            })\n//            ->editColumn('name#2', function (\$model) {\n//            })\n//            ->rawColumns([])\n            ->setTotalRecords(\$query->count())\n            ->addIndexColumn()\n            ->orderColumn('ID', ':column \$1')\n            ->setRowId('ID');\n    }\n\n    /**\n     * Get the query source of dataTable.\n     */\n    public function query({$modelName} \$model): QueryBuilder\n    {\n        return \$model->newQuery();\n    }\n\n    /**\n     * Get the dataTable columns definition.\n     */\n    public function getColumns(): array\n    {\n        return [\n            Column::make('DT_RowIndex')->title('#')->orderable(false),\n        ];\n    }\n}\n";
+    }
+}
