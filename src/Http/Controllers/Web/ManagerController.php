@@ -2,7 +2,7 @@
 
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
-use Alyani\Subsystem\DataTables\Manager\ManagerDatatable;
+use Alyani\Subsystem\DataTables\Manager\ManagerDataTable;
 use Alyani\Subsystem\Enums\ManagerStatus;
 use Alyani\Subsystem\Http\Requests\Admin\Manager\CreateManagerRequest;
 use Alyani\Subsystem\Http\Requests\Admin\Manager\UpdateManagerRequest;
@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Hash;
 class ManagerController extends Controller
 {
     /**
-     * @param ManagerDatatable $datatable
+     * @param ManagerDataTable $datatable
      * @return mixed
      */
-    public function list(ManagerDatatable $datatable)
+    public function list(ManagerDataTable $datatable)
     {
         return $datatable->render('subsystem::admin/manager/list', [
             'statuses' => ManagerStatus::valuesTranslate(),

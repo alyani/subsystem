@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class ManagerDatatable extends DataTable
+class ManagerDataTable extends DataTable
 {
     /**
      * Build the DataTable class.

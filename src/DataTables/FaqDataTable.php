@@ -8,7 +8,7 @@ use Alyani\Subsystem\Models\FaqCategory;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class FaqDatatable extends DataTable
+class FaqDataTable extends DataTable
 {
     /**
      * Build the DataTable class.

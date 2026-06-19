@@ -2,7 +2,7 @@
 
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
-use Alyani\Subsystem\DataTables\FaqDatatable;
+use Alyani\Subsystem\DataTables\FaqDataTable;
 use Alyani\Subsystem\Enums\Language;
 use Alyani\Subsystem\Http\Requests\Admin\Faq\CreateRequest;
 use Alyani\Subsystem\Http\Requests\Admin\Faq\UpdateRequest;
@@ -14,10 +14,10 @@ use Illuminate\Http\RedirectResponse;
 class FaqController extends Controller
 {
     /**
-     * @param FaqDatatable $dataTable
+     * @param FaqDataTable $dataTable
      * @return mixed
      */
-    public function list(FaqDatatable $datatable)
+    public function list(FaqDataTable $datatable)
     {
         $relatedTo = request('relatedTo');
         $relatedID = request('relatedID');

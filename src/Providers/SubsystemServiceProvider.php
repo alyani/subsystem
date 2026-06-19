@@ -2,7 +2,7 @@
 
 namespace Alyani\Subsystem\Providers;
 
-use Alyani\Subsystem\Console\Commands\CreateDatatableCommand;
+use Alyani\Subsystem\Console\Commands\CreateDataTableCommand;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -38,7 +38,7 @@ class SubsystemServiceProvider extends ServiceProvider
         $this->log();
 
         $this->commands([
-            CreateDatatableCommand::class,
+            CreateDataTableCommand::class,
         ]);
     }
 

@@ -2,7 +2,7 @@
 
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
-use Alyani\Subsystem\DataTables\RoleDatatable;
+use Alyani\Subsystem\DataTables\RoleDataTable;
 use Alyani\Subsystem\Http\Requests\Admin\Role\UpdateRequest;
 use Alyani\Subsystem\Http\Requests\Admin\Role\CreateRequest;
 use Alyani\Subsystem\Models\Role;

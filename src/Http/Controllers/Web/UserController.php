@@ -3,7 +3,7 @@
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
 use App\Models\User;
-use Alyani\Subsystem\DataTables\User\UserDatatable;
+use Alyani\Subsystem\DataTables\User\UserDataTable;
 use Alyani\Subsystem\Http\Requests\Admin\User\CreateRequest;
 use Alyani\Subsystem\Http\Requests\Admin\User\UpdateRequest;
 use Alyani\Subsystem\Enums\UserStatus;
@@ -14,10 +14,10 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     /**
-     * @param UserDatatable $datatable
+     * @param UserDataTable $datatable
      * @return mixed
      */
-    public function list(UserDatatable $datatable)
+    public function list(UserDataTable $datatable)
     {
         return $datatable->render('subsystem::admin.user.list', [
             'statuses' => UserStatus::valuesTranslate(),

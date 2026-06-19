@@ -7,7 +7,7 @@ use Alyani\Subsystem\Models\Role;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class RoleDatatable extends DataTable
+class RoleDataTable extends DataTable
 {
     /**
      * Build the DataTable class.

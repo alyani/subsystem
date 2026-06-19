@@ -2,7 +2,7 @@
 
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
-use Alyani\Subsystem\DataTables\ArticleDatatable;
+use Alyani\Subsystem\DataTables\ArticleDataTable;
 use Alyani\Subsystem\Enums\ActivationStatus;
 use Alyani\Subsystem\Enums\Language;
 use Alyani\Subsystem\Http\Requests\Admin\Article\CreateRequest;
@@ -16,7 +16,7 @@ use Illuminate\Http\RedirectResponse;
 class ArticleController extends Controller
 {
     /**
-     * @param ArticleDatatable $dataTable
+     * @param ArticleDataTable $dataTable
      * @return mixed
      */
     public function list(ArticleDataTable $dataTable)

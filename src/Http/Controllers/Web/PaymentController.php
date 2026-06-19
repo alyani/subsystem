@@ -2,14 +2,14 @@
 
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
-use Alyani\Subsystem\DataTables\PaymentDatatable;
+use Alyani\Subsystem\DataTables\PaymentDataTable;
 use Alyani\Subsystem\Enums\PaymentStatus;
 use Alyani\Subsystem\Models\PaymentGateway;
 
 class PaymentController extends Controller
 {
     /**
-     * @param PaymentDatatable $dataTable
+     * @param PaymentDataTable $dataTable
      * @return mixed
      */
     public function list(PaymentDataTable $dataTable)

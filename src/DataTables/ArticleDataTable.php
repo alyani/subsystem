@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Column;
 
-class ArticleDatatable extends DataTable
+class ArticleDataTable extends DataTable
 {
     /**
      * Build the DataTable class.

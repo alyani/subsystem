@@ -2,7 +2,7 @@
 
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
-use Alyani\Subsystem\DataTables\FaqCategoryDatatable;
+use Alyani\Subsystem\DataTables\FaqCategoryDataTable;
 use Alyani\Subsystem\Enums\Language;
 use Alyani\Subsystem\Http\Requests\Admin\FaqCategory\CreateRequest;
 use Alyani\Subsystem\Http\Requests\Admin\FaqCategory\UpdateRequest;
@@ -13,10 +13,10 @@ use Illuminate\Http\RedirectResponse;
 class FaqCategoryController extends Controller
 {
     /**
-     * @param FaqCategoryDatatable $dataTable
+     * @param FaqCategoryDataTable $dataTable
      * @return mixed
      */
-    public function list(FaqCategoryDatatable $dataTable)
+    public function list(FaqCategoryDataTable $dataTable)
     {
         $language = Language::valuesTranslate();
 
