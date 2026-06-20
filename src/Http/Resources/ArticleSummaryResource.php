@@ -21,14 +21,14 @@ class ArticleSummaryResource extends JsonResource
             'author' => [
                 'name' => $this->manager->name,
                 'family' => $this->manager->family,
-                'avatarSID' => $this->manager->avatarSID,
+                'avatarSID' => StorageResource::make($this->manager->storage),
             ],
             'title' => $this->title,
             'slug' => $this->slug,
             'reading_time' => $this->reading_time,
             'posterSID' => !empty($this->posterSID) ? StorageResource::make($this->storage) : null,
             'categories' => ArticleCategorySummaryResource::collection($this->categories),
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->timestamp,
         ];
     }
 }

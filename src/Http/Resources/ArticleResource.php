@@ -21,7 +21,7 @@ class ArticleResource extends JsonResource
             'author' => [
                 'name' => $this->manager->name,
                 'family' => $this->manager->family,
-                'avatarSID' => $this->manager->avatarSID,
+                'avatarSID' => StorageResource::make($this->manager->storage),
             ],
             'title' => $this->title,
             'slug' => $this->slug,
@@ -31,7 +31,7 @@ class ArticleResource extends JsonResource
             'meta_title' => $this->meta_title,
             'meta_description' => $this->meta_description,
             'meta_keyword' => $this->meta_keyword,
-            'created_at' => $this->created_at,
+            'created_at' => $this->created_at->timestamp,
             'posterSID' => StorageResource::make($this->storage),
             'categories' => ArticleCategorySummaryResource::collection($this->categories),
         ];

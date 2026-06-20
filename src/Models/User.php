@@ -139,4 +139,11 @@ class User extends Authenticatable
             get: fn () => exchange($this->balance, $this->currency->value, $this->currency->display()),
         );
     }
+
+    protected function incomeBalanceToDisplay(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => exchange($this->income_balance, $this->currency->value, $this->currency->display()),
+        );
+    }
 }

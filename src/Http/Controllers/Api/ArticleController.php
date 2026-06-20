@@ -69,7 +69,7 @@ class ArticleController extends Controller
                 now()->addMinutes(15),
                 function () use ($slug, $language) {
                     return Article::query()
-                        ->with(['storage', 'categories:id,title,slug', 'manager:id,name,family,avatarSID'])
+                        ->with(['storage', 'categories:id,title,slug', 'manager:id,name,family,avatarSID', 'manager.storage'])
                         ->where('slug', $slug)
                         ->where('language', $language)
                         ->first();
@@ -126,7 +126,7 @@ class ArticleController extends Controller
                             'posterSID',
                             'created_at'
                         ])
-                        ->with(['storage', 'categories:id,title,slug', 'manager:id,name,family,avatarSID'])
+                        ->with(['storage', 'categories:id,title,slug', 'manager:id,name,family,avatarSID', 'manager.storage'])
                         ->when(!empty($data['title']), function ($query) use ($data) {
                             return $query->where('title', 'like', '%' . $data['title'] . '%');
                         })

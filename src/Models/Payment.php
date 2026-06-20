@@ -32,11 +32,9 @@ class Payment extends Model implements TransactionableContract
         'invoice_status' => PaymentInvoiceStatus::class,
         'gateway_data' => AsArray::class,
         'extra_data' => AsArray::class,
+        'payment_date' => 'datetime',
     ];
 
-    protected $dates = [
-        'payment_date',
-    ];
 
     const ERROR_UPDATING_STATUS = 1000;
     const ERROR_INCREASE_BALANCE = 1001;

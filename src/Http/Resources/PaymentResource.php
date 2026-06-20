@@ -23,8 +23,8 @@ class PaymentResource extends JsonResource
             'gateway_reference' => $this->gateway_reference,
             'payment_gateway' => $this->paymentGateway->title[config('app.locale')] ?? current($this->paymentGateway->title),
             'status' => $this->status->getTranslate(),
-            'created_at' => toJalaliDate($this->created_at, 'Y/m/d H:i:s'),
-            'payment_date' => toJalaliDate($this->payment_date, 'Y/m/d H:i:s'),
+            'created_at' => $this->created_at->timestamp,
+            'payment_date' => $this->payment_date->timestamp,
         ];
     }
 }

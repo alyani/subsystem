@@ -1,0 +1,7 @@
+*.log
+.DS_Store
+/.idea
+/.vscode
+/.history
+Thumbs.db
+.php-cs-fixer.dist.php
