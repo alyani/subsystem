@@ -18,6 +18,7 @@ class Transaction extends Model
         'amount' => 'integer',
         'currency' => Currency::class,
         'type' => TransactionType::class,
+        'payment_date' => 'datetime',
     ];
 
     /**

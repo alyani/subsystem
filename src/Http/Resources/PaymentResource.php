@@ -24,7 +24,7 @@ class PaymentResource extends JsonResource
             'payment_gateway' => $this->paymentGateway->title[config('app.locale')] ?? current($this->paymentGateway->title),
             'status' => $this->status->getTranslate(),
             'created_at' => $this->created_at->timestamp,
-            'payment_date' => $this->payment_date->timestamp,
+            'payment_date' => $this->payment_date?->timestamp,
         ];
     }
 }

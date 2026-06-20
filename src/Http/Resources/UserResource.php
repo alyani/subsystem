@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'mobile' => $this->mobile,
             'avatarSID' => $this->avatarSID,
-            'last_activity' => $this->last_activity->timestamp,
+            'last_activity' => $this->last_activity?->timestamp,
             'email_is_verified' => (bool) $this->email_verified_at,
             'mobile_is_verified' => (bool) $this->mobile_verified_at,
         ];
