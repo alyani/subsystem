@@ -178,8 +178,13 @@ Route::get('/storage/serve/{path}', function (Request $request, $path) {
         abort(403);
     }
 
-    // بازگرداندن فایل به صورت استاندارد
-    return Storage::disk('public')->response($path);
+    return Storage::disk('public')->response($path, null, [
+        'Access-Control-Allow-Origin' => '*', // یا دامنه فرانت‌اِند 
+        'Access-Control-Allow-Methods' => 'GET',
+        'Access-Control-Allow-Headers' => 'Range', // برای ویدیو ضروری است
+        'Access-Control-Expose-Headers' => 'Content-Range, Content-Length', // برای ویدیو
+    ]);
+
 })->name('storage.serve.file')->where('path', '.*');
 
 // IPG
