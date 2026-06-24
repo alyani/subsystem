@@ -72,6 +72,14 @@ trait ApiExeptionHandler
             return $this->error(4, $exception->getMessage(), 500, $responseFormat);
         }
 
+        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            if (method_exists($exception, 'getStatusCode')) {
+                return $this->error(5, $exception->getMessage(), $exception->getStatusCode(), $responseFormat);
+            } else {
+                return $this->error(6, $exception->getMessage(), 500, $responseFormat);
+            }
+        }
+
         if ($exception instanceof \Alyani\Subsystem\Exceptions\CustomApiRequestException) {
             return $this->error($exception->getMessage(), null, $exception->getCode(), $responseFormat);
         }

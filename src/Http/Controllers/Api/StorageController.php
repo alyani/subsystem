@@ -7,6 +7,8 @@ use Alyani\Subsystem\Http\Resources\StorageResource;
 use Alyani\Subsystem\Models\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 class StorageController extends Controller
 {
@@ -22,5 +24,16 @@ class StorageController extends Controller
         return $this->success([
             'storage' => StorageResource::make($storage),
         ]);
+    }
+
+    public function generateLink(Request $request, $type, $SID)
+    {
+        $url = URL::temporarySignedRoute(
+            'storage.download',
+            now()->addMinutes(10),
+            ['type' => $type, 'SID' => $SID]
+        );
+
+        return response()->json(['url' => $url]);
     }
 }

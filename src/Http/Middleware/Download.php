@@ -18,46 +18,80 @@ class Download
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = Auth::guard('sanctum')->user();
-        $isAdmin = optional($user)->getTable() === 'managers';
+        $authUser = Auth::guard('sanctum')->user();
+
+        $isAdmin = optional($authUser)->getTable() === 'managers';
 
         $isExtrenalWebService = false;
         $token = $request->bearerToken();
-        if (!$user && $token) {
-            $isExtrenalWebService = hash_equals(
-                config('subsystem.storage.extrenalServiceToken'),
-                $token
-            );
+
+        if (!$authUser && $token) {
+            $externalToken = config('subsystem.storage.extrenalServiceToken');
+
+            $isExtrenalWebService = $externalToken
+                ? hash_equals($externalToken, $token)
+                : false;
 
             if (!$isExtrenalWebService) {
-                return view('subsystem::errors.404')->withErrors('Error 101');
+                abort(403, 'Error 101');
             }
         }
 
-        $request->attributes->set('isAdmin', $isAdmin);
-        $request->attributes->set('isExtrenalWebService', $isExtrenalWebService);
-
         $SID = pathinfo($request->route('SID') ?? '', PATHINFO_FILENAME);
+
         $storage = Storage::findBySID($SID);
 
         if (!$storage) {
-            return response()->view('subsystem::errors.404', ['error' => "Error 102"], 404);
+            abort(404, 'Error 102');
         }
+
+        if (!$storage->morphable_type) {
+            abort(404, 'Error 103');
+        }
+
+        if (!$storage->isUsed) {
+            abort(404, 'Error 104');
+        }
+
+        $isPublic = (bool) $storage->isPublic;
+        $isSigned = $request->hasValidSignature();
+
+        /**
+         * اجازه دسترسی اگر یکی از این‌ها برقرار باشد:
+         * 1. فایل public باشد
+         * 2. لینک signed معتبر باشد
+         * 3. external web service معتبر باشد
+         * 4. admin باشد
+         * 5. کاربر عادی permission داشته باشد
+         */
+        $hasAccess =
+            $isPublic ||
+            $isSigned ||
+            $isExtrenalWebService ||
+            $isAdmin ||
+            $this->hasStorageCheckPermission($storage, $authUser);
+
+        if (!$hasAccess) {
+            abort(403, 'Error 105');
+        }
+
         $request->attributes->set('storage', $storage);
 
-        $response = $next($request);
+        return $next($request);
+    }
 
-
-        if ($storage->isPublic) {
-            $response->headers->set('Cache-Control', 'max-age=2592000, public, immutable');
-            $response->headers->set('CDN-Cache-Control', 'max-age=2592000');
-        } else {
-            $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
-            $response->headers->set('Pragma', 'no-cache');
-            $response->headers->set('Expires', '0');
-            $response->headers->set('Vary', 'Authorization');
+    protected function hasStorageCheckPermission($storage, $authUser): bool
+    {
+        if (is_null($authUser)) {
+            return false;
         }
 
-        return $response;
+        $storagable = $storage->morphable_type;
+
+        if (method_exists($storagable, 'storageCheck')) {
+            return $storagable::storageCheck($storage, $authUser);
+        }
+
+        return true;
     }
 }

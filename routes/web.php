@@ -173,19 +173,6 @@ Route::get('/storage/{type}/{SID}', [StorageController::class, 'download'])
     ])
     ->name('storage.download');
 
-Route::get('/storage/serve/{path}', function (Request $request, $path) {
-    if (! $request->hasValidSignature()) {
-        abort(403);
-    }
-
-    return Storage::disk('public')->response($path, null, [
-        'Access-Control-Allow-Origin' => '*', // یا دامنه فرانت‌اِند 
-        'Access-Control-Allow-Methods' => 'GET',
-        'Access-Control-Allow-Headers' => 'Range', // برای ویدیو ضروری است
-        'Access-Control-Expose-Headers' => 'Content-Range, Content-Length', // برای ویدیو
-    ]);
-
-})->name('storage.serve.file')->where('path', '.*');
 
 // IPG
 Route::controller(IpgController::class)->group(function () {

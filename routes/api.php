@@ -11,6 +11,7 @@ use Alyani\Subsystem\Http\Controllers\Api\{
     ArticleController,
     PaymentController,
 };
+use Alyani\Subsystem\Http\Middleware\Download;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('storage/upload', 'upload')->name('storage.upload');
     });
 });
+
+// Storage get signed link to doanload
+Route::post('/storage/get-link/{type}/{SID}', [StorageController::class, 'generateLink'])
+    ->withoutMiddleware(['encryption'])
+    ->middleware([
+        Download::class,
+    ])
+    ->name('storage.generateLink');
+
 
 Route::middleware(DetectLanguage::class)->group(function () {
     // FAQ Routes
