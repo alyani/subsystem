@@ -2,13 +2,14 @@
 
 namespace Alyani\Subsystem\Http\Controllers\Web;
 
+use Alyani\Subsystem\Http\Controllers\Api\Controller;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use Alyani\Subsystem\Http\Controllers\Api\Controller;
 use Illuminate\Support\Facades\Storage as StorageSupport;
+use Illuminate\Support\Facades\URL;
 
 class StorageController extends Controller
 {
@@ -41,16 +42,16 @@ class StorageController extends Controller
             return $this->errorResponse(204);
         }
 
-        $fileName = $storage->SID . '.' . $storage->extension;
-        $mimeType = StorageSupport::disk('public')->mimeType($pathFile);
-        return response()->download(
-            StorageSupport::disk('public')->path($pathFile),
-            $fileName,
+        $url = URL::temporarySignedRoute(
+            'storage.serve.file',
+            now()->addMinutes(5),
             [
-                'Content-Type' => $mimeType,
-                'Cache-Control' => $storage->isPublic ? 'max-age=2592000, public' : 'no-store',
+                'path' => $pathFile,
+                'filename' => $storage->SID . '.' . $storage->extension
             ]
         );
+
+        return redirect($url);
     }
 
     protected function isAuthorized($isPublic, $storage, $authUser): bool

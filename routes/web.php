@@ -173,6 +173,15 @@ Route::get('/storage/{type}/{SID}', [StorageController::class, 'download'])
     ])
     ->name('storage.download');
 
+Route::get('/storage/serve/{path}', function (Request $request, $path) {
+    if (! $request->hasValidSignature()) {
+        abort(403);
+    }
+
+    // بازگرداندن فایل به صورت استاندارد
+    return Storage::disk('public')->response($path);
+})->name('storage.serve.file')->where('path', '.*');
+
 // IPG
 Route::controller(IpgController::class)->group(function () {
     Route::match(['GET', 'POST'], '/ipg/verify/{payment_uuid}', 'verify')
