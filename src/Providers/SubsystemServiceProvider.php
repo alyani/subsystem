@@ -3,11 +3,13 @@
 namespace Alyani\Subsystem\Providers;
 
 use Alyani\Subsystem\Console\Commands\CreateDataTableCommand;
+use Alyani\Subsystem\Http\Middleware\CheckPermission;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Routing\Router;
 use Monolog\Formatter\LineFormatter;
 
 class SubsystemServiceProvider extends ServiceProvider
@@ -31,10 +33,18 @@ class SubsystemServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        
+        config([
+            'permission.models.permission' => \Spatie\Permission\Models\Permission::class,
+            'permission.models.role' => \Spatie\Permission\Models\Role::class,
+        ]);
+
+
         $this->registerView();
         $this->registerPublishes();
         $this->registerRoutes();
         $this->registerLang();
+        $this->registerMiddleware();
         $this->log();
 
         $this->commands([
@@ -56,7 +66,11 @@ class SubsystemServiceProvider extends ServiceProvider
          * config
          */
         $this->publishes([
-            __DIR__ . '/../../config' => config_path(),
+            __DIR__ . '/../../config/captcha.php' => config_path('captcha.php'),
+            __DIR__ . '/../../config/smsService.php' => config_path('smsService.php'),
+            __DIR__ . '/../../config/subsystem.php' => config_path('subsystem.php'),
+            __DIR__ . '/../../config/subsystemMenu.php' => config_path('subsystemMenu.php'),
+            __DIR__ . '/../../config/subsystemPermissions-stub.php' => config_path('subsystemPermissions.php'),
         ], 'subsystem');
 
         /**
@@ -97,6 +111,37 @@ class SubsystemServiceProvider extends ServiceProvider
     public function registerView(): void
     {
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'subsystem');
+    }
+
+    public function registerPermissions(): void
+    {
+        $packageConfigPath = __DIR__ . '/../../config/subsystemPermissions.php';
+
+        if ($this->app->runningInConsole() || !config()->has('subsystemPermissions')) {
+            $this->mergeConfigFrom($packageConfigPath, 'subsystemPermissions');
+        } else {
+            // اگر کاربر فایل پروژه را پاپلیش کرده و تغییر داده بود:
+            $packagePermissions = require $packageConfigPath;
+            $projectPermissions = config('subsystemPermissions', []);
+            config([
+                'permissions' => array_replace_recursive(
+                    $packagePermissions,
+                    $projectPermissions
+                )
+            ]);
+        }
+    }
+
+    protected function registerMiddleware(): void
+    {
+        $router = $this->app->make(Router::class);
+
+        $router->aliasMiddleware('checkPermission', CheckPermission::class);
+
+        // میدل‌ورهای اسپاتی برای استفاده راحت در روت‌های پکیج یا پروژه
+        $router->aliasMiddleware('role', \Spatie\Permission\Middleware\RoleMiddleware::class);
+        $router->aliasMiddleware('permission', \Spatie\Permission\Middleware\PermissionMiddleware::class);
+        $router->aliasMiddleware('role_or_permission', \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class);
     }
 
     public function log()

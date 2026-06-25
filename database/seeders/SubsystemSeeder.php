@@ -6,6 +6,7 @@ use Alyani\Subsystem\Database\Seeders\CitySeeder;
 use Alyani\Subsystem\Database\Seeders\CountrySeeder;
 use Alyani\Subsystem\Database\Seeders\CreateManagerSeeder;
 use Alyani\Subsystem\Database\Seeders\ProvinceSeeder;
+use Alyani\Subsystem\Database\Seeders\RolePermissionSeeder;
 use Alyani\Subsystem\Database\Seeders\UserSeeder;
 use Illuminate\Database\Seeder;
 
@@ -21,5 +22,6 @@ class SubsystemSeeder extends Seeder
         $this->call(CountrySeeder::class);
         $this->call(ProvinceSeeder::class);
         $this->call(CitySeeder::class);
+        $this->call(RolePermissionSeeder::class);
     }
 }
