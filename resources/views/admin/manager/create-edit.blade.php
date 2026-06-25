@@ -24,7 +24,7 @@
             <x-form.input name="password" :label="st('Password')" type="password" class=password-input />
         </x-form.row>
 
-        @if ($manager->exists) 
+        @if ($manager->exists && auth()->id() != $manager->id) 
         <x-form.row>
             <x-form.input name="status" :label="st('Status')" type="select" :options="$statuses" :value="old('status', $manager->status)" required/>
         </x-form.row>

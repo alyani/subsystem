@@ -9,6 +9,5 @@ enum ManagerStatus: string
     use EnumUtils;
 
     case Active = 'active';
-    case Deleted = 'deleted';
     case Banned = 'banned';
 }

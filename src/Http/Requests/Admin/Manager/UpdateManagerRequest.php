@@ -33,7 +33,7 @@ class UpdateManagerRequest extends WebRequest
             ],
             'avatar' => ['nullable', 'image'] + config('subsystem.storage.image.validate'), // حداکثر 2MB
             'password' => ['nullable', 'string'],
-            'status' => ['required', 'string', 'in:' . implode(',', ManagerStatus::values())],
+            'status' => ['nullable', 'string', 'in:' . implode(',', ManagerStatus::values())],
         ];
     }
 

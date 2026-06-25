@@ -266,4 +266,6 @@ return [
     'All gateways' => 'همه درگاه‌ها',
     'All statuses' => 'همه وضعیت‌ها',
     'Payment Details' => 'اطلاعات پرداخت',
+
+    'you can not change your status' => 'امکان تغییر وضعیت خود را ندارید.',
 ];

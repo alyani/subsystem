@@ -3,7 +3,6 @@
 return [
     'ManagerStatus' => [
         'active' => 'فعال',
-        'deleted' => 'حذف شده',
         'banned' => 'مسدود شده',
     ],
     'ActivationStatus' => [

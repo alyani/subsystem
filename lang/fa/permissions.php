@@ -8,7 +8,6 @@ return [
     'viewManagers' => 'مشاهده لیست مدیران',
     'createManager' => 'ایجاد مدیر جدید',
     'editManager' => 'ویرایش مدیر',
-    'deleteManager' => 'حذف مدیر',
 
     'manageRoles' => 'نقش‌ها و دسترسی‌ها',
     'viewRoles' => 'مشاهده نقش‌ها',

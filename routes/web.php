@@ -70,7 +70,6 @@ Route::group(['prefix' => 'admin'], function () {
                 Route::post('/store', 'store')->name('admin.manager.store');
                 Route::get('/edit/{manager}', 'edit')->name('admin.manager.edit');
                 Route::post('/update/{manager}', 'update')->name('admin.manager.update');
-                Route::get('/delete/{manager}', 'delete')->name('admin.manager.delete');
             });
 
         // User

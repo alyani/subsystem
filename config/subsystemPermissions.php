@@ -5,7 +5,6 @@ return [
         'manager.manager.list' => 'viewManagers',
         'manager.manager.create' => 'createManager',
         'manager.manager.edit' => 'editManager',
-        'manager.manager.delete' => 'deleteManager',
     ],
 
     'manageRoles' => [

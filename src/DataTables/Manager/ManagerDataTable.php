@@ -23,6 +23,10 @@ class ManagerDataTable extends DataTable
                 if (request()->filled('mobile')) {
                     return $query->where('mobile', 'like', "%" . request('mobile') . "%");
                 }
+
+                if (request()->filled('status')) {
+                    return $query->where('status', request('status'));
+                }
             })
             ->editColumn('avatarSID', function ($model) {
                 return $this->getImage($model->avatarSID);
@@ -43,18 +47,9 @@ class ManagerDataTable extends DataTable
                 return $this->optional($model->email);
             })
             ->addColumn('edit', function ($model) {
-                if ($model->status != ManagerStatus::Deleted->value) {
-                    return $this->actionEdit(route('admin.manager.edit', $model));
-                }
-                return '';
+                return $this->actionEdit(route('admin.manager.edit', $model));
             })
-            ->addColumn('delete', function ($model) {
-                if ($model->status != ManagerStatus::Deleted->value) {
-                    return $this->actionDelete(route('admin.manager.delete', $model));
-                }
-                return '';
-            })
-            ->rawColumns(['edit', 'delete', 'avatarSID'])
+            ->rawColumns(['edit', 'avatarSID'])
             ->setTotalRecords($query->count())
             ->addIndexColumn()
             ->orderColumns(['id'], ':column $1')
@@ -83,7 +78,6 @@ class ManagerDataTable extends DataTable
             Column::make('email')->title(st('Email'))->orderable(false),
             Column::make('status')->title(st('Status'))->orderable(false),
             Column::make('edit')->title(st('Edit'))->orderable(false),
-            Column::make('delete')->title(st('Delete'))->orderable(false),
         ];
     }
 }

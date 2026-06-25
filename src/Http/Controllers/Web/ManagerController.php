@@ -84,6 +84,13 @@ class ManagerController extends Controller
     {
         $data = $request->validated();
 
+        if (
+            auth()->id() == $manager->id && 
+            !empty($data['status']) &&
+            $data['status'] != ManagerStatus::Active->value
+        ) {
+            return redirect()->route('admin.manager.edit', $manager)->with('error', st('you can not change your status'));
+        }
         if (!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
@@ -101,21 +108,6 @@ class ManagerController extends Controller
         $manager->fill($data);
         $manager->save();
         $storage?->used($manager, true);
-
-        return redirect()->route('admin.manager.list')->with('success', st('Operation done successfully'));
-    }
-
-    /**
-     * @param Manager $manager
-     * @return RedirectResponse
-     */
-    public function delete(Manager $manager)
-    {
-        if ($manager->status == ManagerStatus::Deleted->value) {
-            return redirect()->route('admin.manager.list')->withErrors(st('Manager already deleted'));
-        }
-        $manager->status = ManagerStatus::Deleted->value;
-        $manager->save();
 
         return redirect()->route('admin.manager.list')->with('success', st('Operation done successfully'));
     }

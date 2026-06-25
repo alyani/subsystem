@@ -20,7 +20,7 @@ return new class extends Migration {
             $table->string('email')->nullable();
             $table->string('avatarSID')->nullable();
             $table->string('password');
-            $table->enum('status', ['active', 'banned', 'deleted'])->default('active');
+            $table->enum('status', ['active', 'banned'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });
