@@ -82,7 +82,7 @@
                                 <span class="media-heading text-semibold">
                                 {{auth()->user()?->getFullName()}}
                                 </span>
-                            <div class="text-size-mini text-muted">{{st('site administrator')}}</div>
+                            <div class="text-size-mini text-muted">{{auth()->user()->roles?->first()?->name}}</div>
                         </div>
                     </div>
                 </div>
