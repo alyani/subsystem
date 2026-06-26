@@ -22,6 +22,10 @@ class CreateManagerRequest extends WebRequest
             'email' => ['nullable', 'string', 'email', Rule::unique('managers', 'email')],
             'avatar' => ['nullable', 'image'] + config('subsystem.storage.image.validate'), // حداکثر 2MB
             'password' => ['required', 'string'],
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where('guard_name', 'web'),
+            ],
         ];
     }
 

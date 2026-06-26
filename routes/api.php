@@ -58,7 +58,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     // Payment Routes
     Route::controller(PaymentController::class)->group(function () {
-        Route::post('payments', 'list')->name('payment.list');
+        Route::post('payment/list', 'list')->name('payment.list');
     });
 
     // Storage Routes

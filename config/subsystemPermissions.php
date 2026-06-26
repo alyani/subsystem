@@ -2,43 +2,43 @@
 
 return [
     'manageManagers' => [
-        'manager.manager.list' => 'viewManagers',
-        'manager.manager.create' => 'createManager',
-        'manager.manager.edit' => 'editManager',
+        'admin.manager.list' => 'viewManagers',
+        'admin.manager.create' => 'createManager',
+        'admin.manager.edit' => 'editManager',
     ],
 
     'manageRoles' => [
-        'view-roles' => 'viewRoles',
-        'create-roles' => 'createRole',
-        'edit-roles' => 'editRole',
-        'delete-roles' => 'deleteRole',
+        'admin.role.list' => 'viewRoles',
+        'admin.role.create' => 'createRole',
+        'admin.role.edit' => 'editRole',
+        'admin.role.delete' => 'deleteRole',
     ],
 
     'manageUsers' => [
-        'manager.manager.list' => 'viewUsers',
-        'manager.manager.edit' => 'editUser',
-        'manager.manager.updateStatus' => 'updateUserStatus',
-        'manager.userManageBalance' => 'manageUserBalance',
+        'admin.user.list' => 'viewUsers',
+        'admin.user.edit' => 'editUser',
+        'admin.user.updateStatus' => 'updateUserStatus',
+        'admin.userManageBalance' => 'manageUserBalance',
     ],
 
     'manageFinance' => [
-        'manager.payment.list' => 'viewPayments',
-        'manager.withdrawal.list' => 'viewWithdrawals',
-        'manager.transaction.list' => 'viewTransactions',
+        'admin.payment.list' => 'viewPayments',
+        'admin.withdrawal.list' => 'viewWithdrawals',
+        'admin.transaction.list' => 'viewTransactions',
     ],
 
     'manageArticleCategories' => [
-        'manager.articleCategory.list' => 'viewArticleCategories',
-        'manager.articleCategory.create' => 'createArticleCategory',
-        'manager.articleCategory.edit' => 'editArticleCategory',
-        'manager.articleCategory.delete' => 'deleteArticleCategory',
+        'admin.articleCategory.list' => 'viewArticleCategories',
+        'admin.articleCategory.create' => 'createArticleCategory',
+        'admin.articleCategory.edit' => 'editArticleCategory',
+        'admin.articleCategory.delete' => 'deleteArticleCategory',
     ],
 
     'manageArticles' => [
-        'manager.article.list' => 'viewArticles',
-        'manager.article.create' => 'createArticle',
-        'manager.article.edit' => 'editArticle',
-        'manager.article.delete' => 'deleteArticle',
+        'admin.article.list' => 'viewArticles',
+        'admin.article.create' => 'createArticle',
+        'admin.article.edit' => 'editArticle',
+        'admin.article.delete' => 'deleteArticle',
     ],
 ];
 

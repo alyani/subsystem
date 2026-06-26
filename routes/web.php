@@ -10,6 +10,7 @@ use Alyani\Subsystem\Http\Controllers\Web\HeavyUploaderController;
 use Alyani\Subsystem\Http\Controllers\Web\IpgController;
 use Alyani\Subsystem\Http\Controllers\Web\ManagerController;
 use Alyani\Subsystem\Http\Controllers\Web\PaymentController;
+use Alyani\Subsystem\Http\Controllers\Web\RoleController;
 use Alyani\Subsystem\Http\Controllers\Web\StorageController;
 use Alyani\Subsystem\Http\Controllers\Web\TinymceController;
 use Alyani\Subsystem\Http\Controllers\Web\TransactionController;
@@ -165,6 +166,18 @@ Route::group(['prefix' => 'admin'], function () {
                 Route::get('/edit/{article}', 'edit')->name('admin.article.edit');
                 Route::post('/update/{article}', 'update')->name('admin.article.update');
                 Route::get('/delete/{article}', 'delete')->name('admin.article.delete');
+            });
+
+        // Role
+        Route::prefix('role')
+            ->controller(RoleController::class)
+            ->group(function () {
+                Route::get('/list', 'list')->name('admin.role.list');
+                Route::get('/create', 'create')->name('admin.role.create');
+                Route::post('/store', 'store')->name('admin.role.store');
+                Route::get('/edit/{role}', 'edit')->name('admin.role.edit');
+                Route::post('/update/{role}', 'update')->name('admin.role.update');
+                Route::get('/delete/{role}', 'delete')->name('admin.role.delete');
             });
     });
 });

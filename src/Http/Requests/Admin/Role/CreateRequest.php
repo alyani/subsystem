@@ -15,8 +15,27 @@ class CreateRequest extends WebRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', Rule::unique('roles', 'name')],
-            'description' => ['nullable', 'string', 'max:255'],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('roles', 'name')
+                    ->where('guard_name', 'web'),
+            ],
+            'permissions' => ['required', 'array', 'min:1'],
+            'permissions.*' => ['string', 'exists:permissions,name'],
         ];
+    }
+
+    public function messages(): array
+    {
+        $messages = parent::messages();
+        return array_merge(
+            $messages,
+            [
+                'permissions.required' => 'انتخاب حداقل یک مجوز الزامی‌ست',
+                'permissions.min' => 'انتخاب حداقل یک مجوز الزامی‌ست',
+            ]
+        );
     }
 }

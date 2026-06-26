@@ -5,7 +5,7 @@ return [
         'dashboard' => 'داشبورد',
         'Managers' => 'مدیران',
         'Manager list' => 'لیست مدیران',
-        'Add manager' => 'افزودن مدیر',
+        'Role list' => 'لیست نقش‌های مدیر ',
         'Users' => 'کاربران',
         'User list' => 'لیست کاربران',
         'Add user' => 'افزودن کاربر',
@@ -268,4 +268,10 @@ return [
     'Payment Details' => 'اطلاعات پرداخت',
 
     'you can not change your status' => 'امکان تغییر وضعیت خود را ندارید.',
+    'you can not change your role' => 'امکان تغییر نقش خود را ندارید.',
+
+    'No manager' => 'بدون مدیر',
+    'Role' => 'نقش',
+    'All roles' => 'همه نقش‌ها',
+    'this role is assigned to one or more managers and cannot be deleted' => 'این نقش به یک یا چند مدیر اختصاص داده شده است و قابل حذف نیست.',
 ];

@@ -44,6 +44,7 @@ class SubsystemServiceProvider extends ServiceProvider
         $this->registerPublishes();
         $this->registerRoutes();
         $this->registerLang();
+        $this->registerPermissions();
         $this->registerMiddleware();
         $this->log();
 
@@ -117,19 +118,15 @@ class SubsystemServiceProvider extends ServiceProvider
     {
         $packageConfigPath = __DIR__ . '/../../config/subsystemPermissions.php';
 
-        if ($this->app->runningInConsole() || !config()->has('subsystemPermissions')) {
-            $this->mergeConfigFrom($packageConfigPath, 'subsystemPermissions');
-        } else {
-            // اگر کاربر فایل پروژه را پاپلیش کرده و تغییر داده بود:
-            $packagePermissions = require $packageConfigPath;
-            $projectPermissions = config('subsystemPermissions', []);
-            config([
-                'permissions' => array_replace_recursive(
-                    $packagePermissions,
-                    $projectPermissions
-                )
-            ]);
-        }
+        $packagePermissions = require $packageConfigPath;
+        $projectPermissions = config('subsystemPermissions', []);
+
+        config([
+            'subsystemPermissions' => array_replace_recursive(
+                $packagePermissions,
+                $projectPermissions
+            ),
+        ]);
     }
 
     protected function registerMiddleware(): void

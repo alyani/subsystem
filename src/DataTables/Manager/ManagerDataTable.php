@@ -21,12 +21,19 @@ class ManagerDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->filter(function ($query) {
                 if (request()->filled('mobile')) {
-                    return $query->where('mobile', 'like', "%" . request('mobile') . "%");
+                    $query->where('mobile', 'like', "%" . request('mobile') . "%");
                 }
 
                 if (request()->filled('status')) {
-                    return $query->where('status', request('status'));
+                    $query->where('status', request('status'));
                 }
+
+                if (request()->filled('role_id')) {
+                    $query->whereHas('roles', function ($q) {
+                        $q->where('roles.id', request('role_id') . '%');
+                    });
+                }
+                return $query;
             })
             ->editColumn('avatarSID', function ($model) {
                 return $this->getImage($model->avatarSID);
@@ -48,6 +55,9 @@ class ManagerDataTable extends DataTable
             })
             ->addColumn('edit', function ($model) {
                 return $this->actionEdit(route('admin.manager.edit', $model));
+            })
+            ->addColumn('role', function ($model) {
+                return $model->roles->first()?->name;
             })
             ->rawColumns(['edit', 'avatarSID'])
             ->setTotalRecords($query->count())
@@ -77,6 +87,7 @@ class ManagerDataTable extends DataTable
             Column::make('mobile')->title(st('Mobile'))->orderable(false),
             Column::make('email')->title(st('Email'))->orderable(false),
             Column::make('status')->title(st('Status'))->orderable(false),
+            Column::make('role')->title(st('Role'))->orderable(false),
             Column::make('edit')->title(st('Edit'))->orderable(false),
         ];
     }

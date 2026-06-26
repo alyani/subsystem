@@ -34,6 +34,10 @@ class UpdateManagerRequest extends WebRequest
             'avatar' => ['nullable', 'image'] + config('subsystem.storage.image.validate'), // حداکثر 2MB
             'password' => ['nullable', 'string'],
             'status' => ['nullable', 'string', 'in:' . implode(',', ManagerStatus::values())],
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where('guard_name', 'web'),
+            ],
         ];
     }
 

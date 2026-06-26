@@ -8,12 +8,16 @@ return [
                'routeName' => 'admin.manager.list',
                'active' => [
                    'admin.manager.list',
+                   'admin.manager.create',
+                   'admin.manager.edit',
                ],
            ],
-           'Add manager' => [
-               'routeName' => 'admin.manager.create',
+           'Role list' => [
+               'routeName' => 'admin.role.list',
                'active' => [
-                   'admin.manager.create',
+                   'admin.role.list',
+                   'admin.role.create',
+                   'admin.role.edit',
                ],
            ],
        ],

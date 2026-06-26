@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class ManagerController extends Controller
 {
@@ -22,8 +23,14 @@ class ManagerController extends Controller
      */
     public function list(ManagerDataTable $datatable)
     {
+        $roles = Role::query()
+            ->where('guard_name', 'web')
+            ->orderBy('id', 'asc')
+            ->pluck('name', 'id');
+
         return $datatable->render('subsystem::admin/manager/list', [
             'statuses' => ManagerStatus::valuesTranslate(),
+            'roles' => $roles
         ]);
     }
 
@@ -32,8 +39,14 @@ class ManagerController extends Controller
      */
     public function create()
     {
+        $roles = Role::query()
+            ->where('guard_name', 'web')
+            ->orderBy('id', 'asc')
+            ->pluck('name', 'id');
+
         return view('subsystem::admin.manager.create-edit', [
-            'manager' => new Manager()
+            'manager' => new Manager(),
+            'roles' => $roles
         ]);
     }
 
@@ -46,6 +59,8 @@ class ManagerController extends Controller
         $data = $request->validated();
         $data['password'] = Hash::make($data['password']);
 
+        $role = Role::findOrFail($data['role_id']);
+    
         $storage = null;
         if (isset($data['avatar'])) {
             $storage = Storage::uploadFile(['file' => $data['avatar'], 'type' => 'image']);
@@ -54,6 +69,7 @@ class ManagerController extends Controller
         }
         $manager = Manager::create($data);
         $storage?->used($manager, true);
+        $manager->assignRole($role);
 
         return back()->with('success', st('Operation done successfully'));
     }
@@ -64,6 +80,11 @@ class ManagerController extends Controller
      */
     public function edit(Manager $manager)
     {
+        $roles = Role::query()
+            ->where('guard_name', 'web')
+            ->orderBy('id', 'asc')
+            ->pluck('name', 'id');
+
         if ($manager->avatarSID) {
             $manager->load('storage');
             $manager->avatarSID = $manager->avatarSID . '.' . $manager->storage->extension ?? '';
@@ -72,6 +93,7 @@ class ManagerController extends Controller
         return view('subsystem::admin.manager.create-edit', [
             'manager' => $manager,
             'statuses' => ManagerStatus::valuesTranslate(),
+            'roles' => $roles
         ]);
     }
 
@@ -84,13 +106,23 @@ class ManagerController extends Controller
     {
         $data = $request->validated();
 
+        $role = Role::findOrFail($data['role_id']);
+
         if (
-            auth()->id() == $manager->id && 
+            auth()->id() == $manager->id &&
             !empty($data['status']) &&
             $data['status'] != ManagerStatus::Active->value
         ) {
             return redirect()->route('admin.manager.edit', $manager)->with('error', st('you can not change your status'));
         }
+
+        if (
+            auth()->id() == $manager->id &&
+            $manager->roles->first()?->id != $data['role_id']
+        ) {
+            return redirect()->route('admin.manager.edit', $manager)->with('error', st('you can not change your role'));
+        }
+
         if (!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
@@ -108,6 +140,7 @@ class ManagerController extends Controller
         $manager->fill($data);
         $manager->save();
         $storage?->used($manager, true);
+        $manager->syncRoles($role);
 
         return redirect()->route('admin.manager.list')->with('success', st('Operation done successfully'));
     }
