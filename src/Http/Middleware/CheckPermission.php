@@ -8,17 +8,17 @@ use Illuminate\Support\Facades\Gate;
 
 class CheckPermission
 {
-    public function handle(Request $request, Closure $next, ?string $customPermission = null)
+    public function handle(Request $request, Closure $next)
     {
-        $routeName = $request->route()->getName();
-        
         // If a custom permission is explicitly passed from the route, use it.
         // Otherwise, fallback to the automatic normalization.
-        $permissionToCheck = $customPermission ?: $this->normalizeRouteName($routeName);
+        $permissions = $request->route()->getAction('permissions')
+            ?? [$this->normalizeRouteName($request->route()->getName())];
 
-        // Check user access using the normalized route name
-        if (Gate::allows($permissionToCheck)) {
-            return $next($request);
+        foreach ($permissions as $permission) {
+            if (Gate::allows($permission)) {
+                return $next($request);
+            }
         }
 
         abort(403, 'Access denied');

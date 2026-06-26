@@ -2,9 +2,10 @@
 
 namespace Alyani\Subsystem\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 use Alyani\Subsystem\Models\Manager;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -20,14 +21,23 @@ class AuthServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        
+        Route::macro('permission', function (string|array ...$permissions) {
+            $permissions = collect($permissions)
+                ->flatten()
+                ->values()
+                ->all();
+
+            /** @var \Illuminate\Routing\Route $this */
+            $this->action['permissions'] = $permissions;
+            return $this;
+        });
+
         // اگر می‌خواهید یک رول مثل Super Admin به همه چیز دسترسی داشته باشد:
         Gate::before(function ($user, $ability) {
             if (method_exists($user, 'hasRole') && $user->hasRole('Super Admin')) {
                 return true;
             }
         });
-
     }
 
     protected function configureGuard(): void

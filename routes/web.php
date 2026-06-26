@@ -90,11 +90,10 @@ Route::group(['prefix' => 'admin'], function () {
         // User manage balance
         Route::prefix('user/manageBalance')
             ->controller(UserManageBalanceController::class)
-            ->middleware('checkPermission:admin.userManageBalance')
             ->group(function () {
                 Route::get('/{user}', 'manageBalance')->name('admin.userManageBalance');
-                Route::post('/{user}/increase', 'increase')->name('admin.userManageBalance.increase');
-                Route::post('/{user}/decrease', 'decrease')->name('admin.userManageBalance.decrease');
+                Route::post('/{user}/increase', 'increase')->name('admin.userManageBalance.increase')->permission('admin.userManageBalance');
+                Route::post('/{user}/decrease', 'decrease')->name('admin.userManageBalance.decrease')->permission('admin.userManageBalance');
             });
 
         // Payment
