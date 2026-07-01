@@ -127,6 +127,12 @@ class Storage extends Model
 
         StorageSupport::disk('public')->move($tempFilePath, $newFilePath);
 
+        
+        Log::info([
+            'exists' => StorageSupport::disk('public')->exists($newFilePath),
+            'path' => StorageSupport::disk('public')->path($newFilePath),
+        ]);
+
         // Thumbnail
         if ($this->fileType == 'image' && StorageSupport::disk('public')->exists($newFilePath)) {
             try {
@@ -138,10 +144,7 @@ class Storage extends Model
                 ) {
                     $image = StorageSupport::disk('public')->path($newFilePath);
 
-                    Log::info([
-                        'exists' => StorageSupport::disk('public')->exists($newFilePath),
-                        'path' => StorageSupport::disk('public')->path($newFilePath),
-                    ]);
+                    
                     $manager = new ImageManager(new Driver());
                     $img = $manager->read($image);
                     $img = $img->resize($configThumbnail['width'], $configThumbnail['height']);
