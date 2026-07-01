@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage as StorageSupport;
 use Illuminate\Support\Str;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Log;
 
 class Storage extends Model
 {
