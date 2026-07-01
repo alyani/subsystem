@@ -128,7 +128,7 @@ class Storage extends Model
         StorageSupport::disk('public')->move($tempFilePath, $newFilePath);
 
         // Thumbnail
-        if ($this->fileType == 'image') {
+        if ($this->fileType == 'image' && StorageSupport::disk('public')->exists($newFilePath)) {
             try {
                 $configThumbnail = Config::get('subsystem.storage.image.thumbnail', []);
 
