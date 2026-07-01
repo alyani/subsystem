@@ -126,25 +126,46 @@ class Storage extends Model
 
         // Thumbnail
         if ($this->fileType == 'image') {
-            $configThumbnail = Config::get('subsystem.storage.image.thumbnail' ?? []);
+        try {
+            $configThumbnail = Config::get('subsystem.storage.image.thumbnail', []);
+
             if (
                 !empty($configThumbnail) &&
                 $this->height > $configThumbnail['height'] && $this->width > $configThumbnail['width']
             ) {
                 $image = StorageSupport::disk('public')->path($newFilePath);
 
+                Log::info([
+                    'exists' => StorageSupport::disk('public')->exists($newFilePath),
+                    'path' => StorageSupport::disk('public')->path($newFilePath),
+                ]);
                 $manager = new ImageManager(new Driver());
                 $img = $manager->read($image);
                 $img = $img->resize($configThumbnail['width'], $configThumbnail['height']);
                 $pathThumbnail = $destinationPath . $configThumbnail['pathThumbnail'];
-                if (!StorageSupport::disk('public')->exists($pathThumbnail)) {
-                    StorageSupport::disk('public')->makeDirectory($pathThumbnail);
-                }
-                $imgToWebp = $img->toWebp(Config::get('subsystem.storage.image.thumbnailConversionQuality'));
 
-                StorageSupport::disk('public')->put($pathThumbnail . '/' . $this->SID, (string)$imgToWebp);
+                StorageSupport::disk('public')->makeDirectory($pathThumbnail);
+
+                StorageSupport::disk('public')->put(
+                    $pathThumbnail . '/' . $this->SID,
+                    (string) $img->toWebp(
+                        Config::get('subsystem.storage.image.thumbnailConversionQuality')
+                    )
+                );
             }
+        } catch (Throwable $e) {
+            Log::error('Thumbnail generation failed', [
+                'storage_id' => $this->id,
+                'sid' => $this->SID,
+                'path' => $newFilePath,
+                'mime' => $this->mimeType,
+                'extension' => $this->extension,
+                'size' => $this->fileSize,
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+            ]);
         }
+    }
 
         $this->morphable()->associate($model);
         $this->isUsed = true;
