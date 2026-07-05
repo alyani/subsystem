@@ -9,6 +9,7 @@ use Alyani\Subsystem\Enums\PaymentInvoiceStatus;
 use Alyani\Subsystem\Enums\PaymentStatus;
 use Alyani\Subsystem\Models\Traits\Finance\Transactionable;
 use Alyani\Subsystem\Models\Traits\Pagination;
+use App\Models\Traits\HasStats;
 use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,6 +23,7 @@ class Payment extends Model implements TransactionableContract
     use HasFactory;
     use Transactionable;
     use Pagination;
+    use HasStats;
 
     protected $casts = [
         'base_amount' => 'integer',
