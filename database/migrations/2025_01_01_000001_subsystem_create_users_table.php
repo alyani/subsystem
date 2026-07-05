@@ -46,6 +46,10 @@ return new class extends Migration {
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('last_activity')->nullable();
             $table->softDeletes();
+
+            $table->index(['last_activity']);
+            $table->index(['created_at']);
+            $table->index(['deleted_at']);
         });
     }
 

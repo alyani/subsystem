@@ -19,7 +19,7 @@ return new class () extends Migration {
             $table->integer('transaction_fee_amount')->default(0);
             $table->bigInteger('amount');
             $table->enum('currency', ['IRR']);
-            $table->enum('status', ['pending', 'processing', 'verified', 'failed'])->default('pending')->index();
+            $table->enum('status', ['pending', 'processing', 'verified', 'failed'])->default('pending');
             $table->string('gateway_reference', 100)->nullable()->unique();
             $table->string('iban', 20)->nullable()->index();
             $table->string('card_number', 20)->nullable()->index();
@@ -33,6 +33,8 @@ return new class () extends Migration {
             $table->text('error_data')->nullable();
             $table->timestamp('payment_date')->nullable();
             $table->timestamps();
+            $table->index(['status', 'payment_date']); 
+            $table->index(['created_at']); 
         });
     }
 
