@@ -37,6 +37,7 @@ Route::middleware('throttle:5,15')->group(function () {
         Route::post('/user/sendOTP', 'sendOTP')->name('user.sendOTP');
         Route::post('/user/register', 'register')->name('user.register');
         Route::post('/user/login', 'login')->name('user.login');
+        Route::post('/user/resetPassword', 'resetPassword')->name('user.resetPassword');
     });
 });
 

@@ -5,7 +5,6 @@ namespace Alyani\Subsystem\Http\Controllers\Api;
 use Alyani\Subsystem\Enums\UserStatus;
 use Alyani\Subsystem\Http\Requests\Api\Profile\ChangePasswordRequest;
 use Alyani\Subsystem\Http\Requests\Api\Profile\SetMobileRequest;
-use Alyani\Subsystem\Http\Requests\Api\Profile\SetPasswordRequest;
 use Alyani\Subsystem\Http\Requests\Api\Profile\SetRequest;
 use Alyani\Subsystem\Http\Requests\Api\Profile\VerifyMobileRequest;
 use Alyani\Subsystem\Http\Resources\UserResource;
@@ -58,23 +57,6 @@ class ProfileController extends Controller
 
         return $this->success([
             'user' => UserResource::make($authUser),
-        ]);
-    }
-
-    public function setPassword(SetPasswordRequest $request)
-    {
-        $authUser = auth()->user();
-        $data = $request->validated();
-
-        if (!empty($authUser->password)) {
-            return $this->error(1, st('The user has a password, please use this password for login'));
-        }
-
-        $authUser->password = Hash::make($data['password']);
-        $authUser->save();
-
-        return $this->success([
-            'nextState' => $authUser->status == UserStatus::WaitingForSetProfile ? 'setProfile' : 'dashboard',
         ]);
     }
 

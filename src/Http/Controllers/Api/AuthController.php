@@ -5,6 +5,7 @@ namespace Alyani\Subsystem\Http\Controllers\Api;
 use Alyani\Subsystem\Enums\UserStatus;
 use Alyani\Subsystem\Http\Requests\Api\Auth\LoginRequest;
 use Alyani\Subsystem\Http\Requests\Api\Auth\RegisterRequest;
+use Alyani\Subsystem\Http\Requests\Api\Auth\ResetPasswordRequest;
 use Alyani\Subsystem\Http\Requests\Api\Auth\SendOTPRequest;
 use Alyani\Subsystem\Services\OtpSenders\EmailOtpSender;
 use Alyani\Subsystem\Services\OtpSenders\SmsOtpSender;
@@ -164,6 +165,55 @@ class AuthController extends Controller
         }
 
         $user->last_activity = now();
+        $user->save();
+
+        return $this->success([
+            'token' => $user->createToken('owner')->plainTextToken,
+        ]);
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        $data = $request->validated();
+        $authorityKey = config('subsystem.signupAuthorityKey');
+        $authorityValue = $data[$authorityKey];
+
+        try {
+            $sender = $authorityKey === 'email'
+                ? app(EmailOtpSender::class)
+                : app(SmsOtpSender::class);
+            $otp = new OTPService(
+                action: 'resetPassword',
+                authorityKey: $authorityKey,
+                authorityValue: $authorityValue,
+                sender: $sender,
+            );
+            $otp->verify($data['OTP']);
+        } catch (Exception $e) {
+            if ($e->getCode() == OTPService::EXPIRED) {
+                return $this->error(1, $e->getMessage());
+            }
+            if ($e->getCode() == OTPService::SEND_VERIFY_EXCEEDED) {
+                return $this->error(2, $e->getMessage());
+            }
+            if ($e->getCode() == OTPService::INVALID_OTP) {
+                return $this->error(3, $e->getMessage());
+            }
+            Log::error(__METHOD__ . ': Verify OTP failed', [
+                'target' => $authorityValue,
+                'method' => $otp->data('method'),
+                'error' => $e->getMessage(),
+            ]);
+            return $this->error(4, st('Something went wrong. Please try again.'));
+        }
+
+        $userOTPInfo = $otp->data('extraData');
+        $user = User::where($authorityKey, $authorityValue)->first();
+        if (!$user) {
+            return $this->error(2, st('No account found with these details.'));
+        }
+
+        $user->password = Hash::make($userOTPInfo['password']);
         $user->save();
 
         return $this->success([
