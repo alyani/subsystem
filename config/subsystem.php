@@ -8,6 +8,7 @@ return [
     'adminAuthModel' => \Alyani\Subsystem\Models\Manager::class,
     'singleToken' => false,
     'signupAuthorityKey' => 'email', // email | mobile
+    'lastActivityUpdateInterval' => 0, // in Minutes, default is zero , user last activyt will be updated at each request
     'availableItemsPerPage' => [
         25,
         50,

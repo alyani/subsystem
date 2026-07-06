@@ -9,15 +9,20 @@ class UpdateLastActivity
 {
     public function handle(Request $request, Closure $next)
     {
-        $authUser = auth()->user();
-        if (!$authUser) {
-            return $next($request);
+        $interval = config('subsystem.lastActivityUpdateInterval', 5);
+
+        if ($user = $request->user()) {
+            if (
+                $interval === 0 ||
+                !$user->last_activity ||
+                $user->last_activity->lt(now()->subMinutes($interval))
+            ) {
+                $user->forceFill([
+                    'last_activity' => now(),
+                ])->saveQuietly();
+            }
         }
-        if ($authUser->last_activity->lt(now()->subMinutes(5))) {
-            $authUser->forceFill([
-                'last_activity' => now(),
-            ])->save();
-        }
+
         return $next($request);
     }
 }
