@@ -97,8 +97,11 @@ class ArticleDataTable extends DataTable
             Column::make('updated')->title(st('Updated at'))->orderable(false),
             // Column::make('show')->title(st('Show'))->orderable(false),
         ];
-        if (!request()->filled('withTrashed')) {
+        if (!request()->filled('withTrashed') && auth()->user()->can('admin.article.edit')) {
             $columns[] = Column::make('edit')->title(st('Edit'))->orderable(false);
+        }
+
+        if (!request()->filled('withTrashed') && auth()->user()->can('admin.article.delete')) {
             $columns[] = Column::make('delete')->title(st('Delete'))->orderable(false);
         }
         return $columns;

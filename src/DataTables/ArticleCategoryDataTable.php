@@ -90,9 +90,15 @@ class ArticleCategoryDataTable extends DataTable
             Column::make('title')->title(st('Title'))->orderable(false),
             Column::make('slug')->title(st('Slug'))->orderable(false),
             Column::make('status')->title(st('Status'))->orderable(false),
-            Column::make('articles')->title(st('menu.Articles'))->orderable(false),
-            Column::make('edit')->title(st('Edit'))->orderable(false),
-            Column::make('delete')->title(st('Delete'))->orderable(false),
+            ...(auth()->user()->can('admin.article.list')) ?
+                [Column::make('articles')->title(st('menu.Articles'))->orderable(false)]
+                : [],
+            ...(auth()->user()->can('admin.articleCategory.edit')) ?
+                [Column::make('edit')->title(st('Edit'))->orderable(false)]
+                : [],
+            ...(auth()->user()->can('admin.articleCategory.delete')) ?
+                [Column::make('delete')->title(st('Delete'))->orderable(false)]
+                : [],
         ];
     }
 }

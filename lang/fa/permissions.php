@@ -19,7 +19,7 @@ return [
     'viewUsers' => 'مشاهده لیست کاربران',
     'editUser' => 'ویرایش کاربر',
     'updateUserStatus' => 'ویرایش وضعیت کاربر',
-    'manageUserBalance' => 'ویرایش موجودی کیف پول کاربر',
+    'manageUserBalance' => 'مدیریت موجودی کیف پول کاربر',
 
     'manageFinance' => 'مدیریت مالی',
     'viewPayments' => 'مشاهده لیست پرداخت‌ها',

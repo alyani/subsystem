@@ -91,8 +91,11 @@ class Withdrawal extends Model implements TransactionableContract
         return st('Money withdrawal');
     }
 
-    public static function getPayableDetailAdminRoute(int $id = null)
+    public static function getPayableDetailAdminRoute(int $id = null, bool $checkPermission = false)
     {
+        if ($checkPermission && !auth()->user()->can('admin.withdrawal.list')) {
+            return null;
+        }
         return route('admin.withdrawal.list', ['id' => $id]);
     }
 }

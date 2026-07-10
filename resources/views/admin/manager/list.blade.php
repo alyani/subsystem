@@ -10,7 +10,9 @@
     </x-form.row>
 @endsection
 
-@section('btn')
-    <a href="{{ route('admin.manager.create') }}" class="btn btn-secondary ml-2">{{ st('Add manager') }}</a>
-@endsection
+@can('admin.manager.create')
+    @section('btn')
+        <a href="{{ route('admin.manager.create') }}" class="btn btn-secondary ml-2">{{ st('Add manager') }}</a>
+    @endsection
+@endcan
  

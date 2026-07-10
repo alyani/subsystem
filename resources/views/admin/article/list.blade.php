@@ -10,6 +10,8 @@
     </x-form.row>
 @endsection
 
-@section('btn')
-    <a href="{{ route('admin.article.create') }}" class="btn btn-secondary ml-2">{{ st('Add article') }}</a>
-@endsection
+@can('admin.article.create')
+    @section('btn')
+        <a href="{{ route('admin.article.create') }}" class="btn btn-secondary ml-2">{{ st('Add article') }}</a>
+    @endsection
+@endcan

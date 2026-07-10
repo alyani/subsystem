@@ -185,4 +185,13 @@ abstract class DataTable extends BaseDataTable
     {
         return $val ? Verta::parse($val)->timestamp : null;
     }
+
+    public function userNickname($user)
+    {
+        if ($user->nickname) {
+            return $user->nickname;
+        } else {
+            return 'user#' . $user->id;
+        }
+    }
 }

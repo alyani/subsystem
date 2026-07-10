@@ -16,5 +16,5 @@ interface TransactionableContract
 
     public static function getPayableTranslate(): string;
 
-    public static function getPayableDetailAdminRoute(int $id = null);
+    public static function getPayableDetailAdminRoute(int $id = null, bool $checkPermission = false);
 }

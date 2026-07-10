@@ -36,8 +36,8 @@ trait Transactionable
         return st($className);
     }
 
-    public static function getPayableDetailAdminRoute(int $id = null)
+    public static function getPayableDetailAdminRoute(int $id = null, bool $checkPermission = false)
     {
-        return false;
+        return null;
     }
 }

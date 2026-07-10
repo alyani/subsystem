@@ -37,8 +37,10 @@ class TransactionDataTable extends DataTable
             })
             ->editColumn('user', function ($model) {
                 if (!empty($model->user)) {
-                    $username = $model->user->nickname ?: '---';
-                    $user = $this->link($username ?: 'user#' . $model->user->id, route('admin.user.show', $model->user));
+                    $userName = $this->userNickname($model->user);
+                    $user = auth()->user()->can('admin.user.list') ?
+                        $this->link($userName, route('admin.user.show', $model->user)) :
+                        $userName;
                 }
                 return $user ?? '---';
             })
@@ -60,7 +62,7 @@ class TransactionDataTable extends DataTable
             })
             ->editColumn('description', function ($model) {
                 $desciption = $model->transactionable_type::getPayableTranslate();
-                $route = $model->transactionable_type::getPayableDetailAdminRoute($model->transactionable_id);
+                $route = $model->transactionable_type::getPayableDetailAdminRoute($model->transactionable_id, true);
                 if ($route) {
                     $desciption = $this->link($desciption, $route);
                 }

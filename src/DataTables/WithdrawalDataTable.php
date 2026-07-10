@@ -37,8 +37,10 @@ class WithdrawalDataTable extends DataTable
             })
             ->editColumn('user', function ($model) {
                 if (!empty($model->user)) {
-                    $username = $model->user->nickname ?: '---';
-                    $user = $this->link($username ?: 'user#' . $model->user->id, route('admin.user.show', $model->user));
+                    $userName = $this->userNickname($model->user);
+                    $user = auth()->user()->can('admin.user.list') ?
+                        $this->link($userName, route('admin.user.show', $model->user)) :
+                        $userName;
                 }
                 return $user ?? '---';
             })

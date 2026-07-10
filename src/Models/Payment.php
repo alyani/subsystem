@@ -370,8 +370,11 @@ class Payment extends Model implements TransactionableContract
         return st('Add fund');
     }
 
-    public static function getPayableDetailAdminRoute(int $id = null)
+    public static function getPayableDetailAdminRoute(int $id = null, bool $checkPermission = false)
     {
+        if ($checkPermission && !auth()->user()->can('admin.payment.list')) {
+            return null;
+        }
         return route('admin.payment.list', ['id' => $id]);
     }
 }

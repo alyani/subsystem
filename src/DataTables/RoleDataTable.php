@@ -74,9 +74,15 @@ class RoleDataTable extends DataTable
         return [
             Column::make('DT_RowIndex')->title('#')->orderable(false),
             Column::make('name')->title(st('Title'))->orderable(false),
-            Column::make('managers')->title(st('menu.Managers'))->orderable(false),
-            Column::make('edit')->title(st('Edit'))->orderable(false),
-            Column::make('delete')->title(st('Delete'))->orderable(false),
+            ...(auth()->user()->can('admin.manager.list')) ?
+                [Column::make('managers')->title(st('menu.Managers'))->orderable(false)]
+                : [],
+            ...(auth()->user()->can('admin.role.edit')) ?
+                [Column::make('edit')->title(st('Edit'))->orderable(false)]
+                : [],
+            ...(auth()->user()->can('admin.role.delete')) ?
+                [Column::make('delete')->title(st('Delete'))->orderable(false)]
+                : [],
         ];
     }
 }

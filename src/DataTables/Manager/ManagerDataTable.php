@@ -88,7 +88,9 @@ class ManagerDataTable extends DataTable
             Column::make('email')->title(st('Email'))->orderable(false),
             Column::make('status')->title(st('Status'))->orderable(false),
             Column::make('role')->title(st('Role'))->orderable(false),
-            Column::make('edit')->title(st('Edit'))->orderable(false),
+            ...(auth()->user()->can('admin.manager.edit')) ?
+                [Column::make('edit')->title(st('Edit'))->orderable(false)]
+                : [],
         ];
     }
 }
