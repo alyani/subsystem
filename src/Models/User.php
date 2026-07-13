@@ -95,6 +95,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function avatarStorage()
+    {
+        return $this->belongsTo(Storage::class, 'avatarSID', 'SID');
+    }
+
     /**
      * Generate referalCode
      */
