@@ -22,6 +22,7 @@ return [
     'date' => ':attribute یک تاریخ معتبر نیست.',
     'date_equals' => ':attribute باید تاریخی برابر با :date باشد.',
     'date_format' => ':attribute با قالب :format مطابقت ندارد.',
+    'decimal' => ':attribute باید دارای :decimal رقم اعشار باشد.',
     'different' => ':attribute و :other باید متفاوت باشند.',
     'digits' => ':attribute باید :digits رقم باشد.',
     'digits_between' => ':attribute باید بین :min و :max رقم باشد.',

@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->enum('gender', ['none', 'male', 'female'])->default('none');
             $table->bigInteger('balance')->default(0);
             $table->enum('currency', ['IRR'])->default('IRR');
-            $table->bigInteger('token_balance')->default(0);
+            $table->decimal('token_balance', 20, 8)->default(0);
             $table->enum('status', [
                 'waitingForSetProfile',
                 'active',

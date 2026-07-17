@@ -87,7 +87,7 @@ class User extends Authenticatable
             'referral_code' => 'string',
             'referred_users_count' => 'integer',
             'score' => 'integer',
-            'token_balance' => 'integer',
+            'token_balance' => 'decimal:8',
             'mobile_verified_at' => 'datetime',
             'email_verified_at' => 'datetime',
             'last_activity' => 'datetime',

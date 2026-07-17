@@ -41,4 +41,3 @@ return [
         'admin.article.delete' => 'deleteArticle',
     ],
 ];
-

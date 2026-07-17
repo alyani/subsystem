@@ -329,4 +329,18 @@ if (!function_exists('getClientIP')) {
         }
         return 'Unknown IP';
     }
+
+    if (!function_exists('formatDecimal')) {
+        function formatDecimal(string|int|float|null $value, int $scale = 8): string
+        {
+            if ($value === null || $value === '') {
+                return '0';
+            }
+
+            return rtrim(
+                rtrim(number_format((float) $value, $scale, '.', ','), '0'),
+                '.'
+            );
+        }
+    }
 }
