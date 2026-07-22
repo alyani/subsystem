@@ -16,6 +16,7 @@ use Alyani\Subsystem\Http\Requests\Admin\UserManageBalance\DecreaseRequest;
 use Alyani\Subsystem\Http\Requests\Admin\UserManageBalance\IncreaseRequest;
 use Alyani\Subsystem\Models\Withdrawal;
 use Alyani\Subsystem\Models\WithdrawalGateway;
+use Illuminate\Support\Str;
 use Throwable;
 
 class UserManageBalanceController extends Controller
@@ -66,6 +67,7 @@ class UserManageBalanceController extends Controller
             'user_id' => $user->id,
             'manager_id' => auth()->id(),
             'payment_gateway_id' => $paymentGateway->id,
+            'uuid' => Str::uuid(),
             'base_amount' => $data['amount'],
             'transaction_fee_amount' => 0,
             'amount' => $data['amount'],

@@ -1,5 +1,6 @@
 <?php
 
+use Alyani\Subsystem\Enums\Currency;
 
 if (!function_exists('normalizeCountryCode')) {
     /**
@@ -265,6 +266,29 @@ if (!function_exists('parseAmount')) {
         $value = preg_replace('/[^0-9]/', '', $val);
 
         return preg_replace('/\B(?=(\d{3})+(?!\d))/', ',', $value);
+    }
+}
+
+if (!function_exists('formatAmount')) {
+    function formatAmount(int|float $amount, string $currency, array $params = [])
+    {
+        if (!$amount) {
+            return '';
+        }
+        if ($options['exchange_IRR_to_IRT'] ?? true && $currency == 'IRR') {
+            $currency = 'IRT';
+            $amount = $amount / 10;
+        }
+        switch ($currency) {
+            case 'IRR':
+                return st(':amount IRR', ['amount' => number_format($amount, 0)]);
+            case 'IRT':
+                return st(':amount IRT', ['amount' => number_format($amount, 0)]);
+            case 'USD':
+                return st('$:amount', ['amount' => formatDecimal($amount, 4)]);
+            default:
+                return $amount . ' ' . $currency;
+        }
     }
 }
 

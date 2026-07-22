@@ -274,4 +274,21 @@ return [
     'Role' => 'نقش',
     'All roles' => 'همه نقش‌ها',
     'this role is assigned to one or more managers and cannot be deleted' => 'این نقش به یک یا چند مدیر اختصاص داده شده است و قابل حذف نیست.',
+
+
+    ':amount IRR' => ':amount ریال',
+    ':amount IRT' => ':amount تومان',
+    '$:amount' => '$:amount',
+
+
+    'Request has been expired' => 'درخواست منقضی شده است',
+    'Payment not found' => 'پرداخت یافت نشد',
+    'There is no active online gateways at the moment' => 'در حال حاضر هیچ درگاه آنلاین فعالی وجود ندارد',
+    'The minimum amount is :min_amount' => 'حداقل مبلغ پرداخت :min_amount است',
+    'Payment connection failed' => 'ارتباط با درگاه پرداخت برقرار نشد',
+    'Payment already processed or invalid status' => 'پرداخت قبلاً پردازش شده یا وضعیت آن نامعتبر است',
+
+    'Payment successful' => 'پرداخت با موفقیت انجام شد',
+    'Payment failed' => 'پرداخت ناموفق بود',
+    'Return to website' => 'بازگشت به سایت',
 ];

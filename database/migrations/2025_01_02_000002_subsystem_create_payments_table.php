@@ -27,14 +27,15 @@ return new class () extends Migration {
             $table->enum('invoice_status', ['pending', 'processing', 'paid_uncompleted', 'completed', 'failed'])->nullable();
             $table->unsignedBigInteger('payment_gateway_id')->index();
             $table->unsignedBigInteger('manager_id')->nullable();
+            $table->uuid()->index();
             $table->string('ip', 16)->nullable();
             $table->json('gateway_data')->nullable();
             $table->json('extra_data')->nullable();
             $table->text('error_data')->nullable();
             $table->timestamp('payment_date')->nullable();
             $table->timestamps();
-            $table->index(['status', 'payment_date']); 
-            $table->index(['created_at']); 
+            $table->index(['status', 'payment_date']);
+            $table->index(['created_at']);
         });
     }
 

@@ -88,7 +88,7 @@ class Payment extends Model implements TransactionableContract
             'method' => 'Payment::setFailed',
             'payment_id' => $this->id,
         ]);
-        $this->debug('Start to set payment failure', ['backtrace' => true]);
+        $this->debug('Start to set payment failure', [], ['backtrace' => true]);
 
         // Set gateway_data if exists
         $this->pushToGatewayData($gatewayData);
@@ -133,7 +133,7 @@ class Payment extends Model implements TransactionableContract
             'payment_id' => $this->id,
         ]);
 
-        $this->debug('Payment verification started', ['backtrace' => true]);
+        $this->debug('Payment verification started', [], ['backtrace' => true]);
 
         // Set gateway_data if exists
         $this->pushToGatewayData($gatewayData);
@@ -209,7 +209,7 @@ class Payment extends Model implements TransactionableContract
                 $this->invoiceable->pay();
             } catch (Exception $e) {
                 $this->invoiceable->refresh();
-                $error = 'Invoice payment had failed';
+                $error = 'Invoice payment has failed';
                 // Update invoice status
                 $this->updateInvoiceStatus(
                     fromStatus: PaymentInvoiceStatus::Processing,
@@ -255,6 +255,11 @@ class Payment extends Model implements TransactionableContract
         return $token;
     }
 
+    public static function getDataByIPGToken(string $token): ?array
+    {
+        return Cache::get(config('subsystem.finance.ipgCache.prefix', 'ipg_') . $token);
+    }
+
     public function pushToGatewayData(array $data)
     {
         $this->gateway_data = array_merge(($this->gateway_data ?: []), $data);
@@ -267,18 +272,38 @@ class Payment extends Model implements TransactionableContract
         return $this;
     }
 
+    public function getReturnUrl(string $status, $message = '', $params = [])
+    {
+        $extraData = $this->extra_data;
+        $returnURL = $extraData['return_url'] ?? '';
+        $returnURL .= (str_contains($returnURL, '?') ? '&' : '?');
+        $params += [
+            'status' => $status,
+            'message' => $message
+        ];
+        $returnURL .= http_build_query(array_filter($params));
+        static::traceLog('Payment return url', ['return_url' => $returnURL], ['backtrace' => true]);
+        return $returnURL;
+    }
+
     /**
      * Log payment for debugging
      */
-    private function debug($message, $params = [])
+    private function debug(string $message, array $params = [], array $options = [])
+    {
+        $params = [
+            'payment_id' => $this->id,
+        ] + $params;
+        static::traceLog($message, $params, $options);
+    }
+
+    public static function traceLog(string $message, array $params = [], array $options = [])
     {
         if (!config('subsystem.finance.debug')) {
             return;
         }
-        $params = [
-            'payment_id' => $this->id,
-        ] + $params;
-        if ($params['backtrace'] ?? false) {
+
+        if ($options['backtrace'] ?? false) {
             $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 5);
             $params['backtrace'] = [];
             foreach ($backtrace as $trace) {
@@ -358,7 +383,7 @@ class Payment extends Model implements TransactionableContract
      */
     public static function isGatewayReferenceUnique(string $gatewayReference, array $status = []): bool
     {
-        $payment = static::where('gatewayReference', $gatewayReference);
+        $payment = static::where('gateway_reference', $gatewayReference);
         if ($status) {
             $payment->whereIn('status', $status);
         }

@@ -20,6 +20,7 @@ use Alyani\Subsystem\Http\Controllers\Web\WithdrawalController;
 use Alyani\Subsystem\Http\Middleware\Download;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
 /*
 |--------------------------------------------------------------------------

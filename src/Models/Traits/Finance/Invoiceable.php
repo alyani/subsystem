@@ -8,6 +8,7 @@ use Alyani\Subsystem\Models\Payment;
 use Alyani\Subsystem\Models\PaymentGateway;
 use Alyani\Subsystem\Models\User;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Exception;
 
 /**
@@ -50,11 +51,15 @@ trait Invoiceable
         $payment->forceFill([
             'user_id' => $this->user_id,
             'payment_gateway_id' => $paymentGateway->id,
+            'uuid' => Str::uuid(),
             'base_amount' => $this->getPayableBaseAmount(),
             'amount' => max($payableAmount, $paymentGateway->min_amount),
             'currency' => $this->getPayableCurrency(),
             'status' => PaymentStatus::Pending,
             'invoice_status' => PaymentInvoiceStatus::Pending,
+            'extra_data' => [
+                'return_url' => $params['return_url'] ?? '',
+            ],
         ]);
         $payment->invoiceable()->associate($this);
         $payment->save();

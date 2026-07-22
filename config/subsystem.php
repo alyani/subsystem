@@ -92,5 +92,19 @@ return [
             'prefix' => 'ipg_',
             'expiry' => 600, // 10 minutues
         ],
+        'paymentExpiresInMinutes' => 30, // minutes
+        'gatewayZarinpal' => [
+            // sandbox
+            'startupURL' => 'https://sandbox.zarinpal.com/pg/StartPay/',
+            'requestURL' => 'https://sandbox.zarinpal.com/pg/v4/payment/request.json',
+            'verifyURL' => 'https://sandbox.zarinpal.com/pg/v4/payment/verify.json',
+            'merchantID' => 'f2614aa3-3a49-4ffe-a1d9-753d5a38c33e',
+
+            // production
+            // 'startupURL' => 'https://www.zarinpal.com/pg/StartPay/',
+            // 'requestURL' => 'https://api.zarinpal.com/pg/v4/payment/request.json',
+            // 'verifyURL' => 'https://api.zarinpal.com/pg/v4/payment/verify.json',
+            // 'merchantID' => '',
+        ],
     ],
 ];
