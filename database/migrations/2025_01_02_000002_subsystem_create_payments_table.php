@@ -15,9 +15,9 @@ return new class () extends Migration {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->index();
-            $table->bigInteger('base_amount');
+            $table->bigInteger('base_amount')->comment('Amount without transaction fee to increase user balance');
             $table->integer('transaction_fee_amount')->default(0);
-            $table->bigInteger('amount');
+            $table->bigInteger('amount')->comment('Amount to pay in gateway, transaction fee is included'); // amount => base_amount + transaction_fee_amount
             $table->enum('currency', ['IRR']);
             $table->enum('status', ['pending', 'processing', 'verified', 'failed'])->default('pending');
             $table->string('gateway_reference', 100)->nullable()->unique();

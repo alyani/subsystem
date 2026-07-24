@@ -47,13 +47,14 @@ trait Invoiceable
         if ($payableAmount <= 0) {
             throw new Exception('Payable amount is required');
         }
+        $payableAmount = max($payableAmount, $paymentGateway->min_amount);
         $payment = new Payment();
         $payment->forceFill([
             'user_id' => $this->user_id,
             'payment_gateway_id' => $paymentGateway->id,
             'uuid' => Str::uuid(),
-            'base_amount' => $this->getPayableBaseAmount(),
-            'amount' => max($payableAmount, $paymentGateway->min_amount),
+            'base_amount' => $payableAmount,
+            'amount' => $payableAmount,
             'currency' => $this->getPayableCurrency(),
             'status' => PaymentStatus::Pending,
             'invoice_status' => PaymentInvoiceStatus::Pending,
@@ -92,24 +93,28 @@ trait Invoiceable
         );
 
         // Decrease wallet and save transaction
-        try {
-            User::decreaseBalance(
-                userID: $this->user_id,
-                transactionable: $this,
-            );
-        } catch (Throwable $e) {
-            $error = 'Failed to decrease user balanace';
-            Log::error($error, ['error' => $e->getMessage()]);
-            $this->changeInvoicePaymentStatus(
-                fromStatus: PaymentStatus::Processing,
-                toStatus: PaymentStatus::Failed,
-                extraParams: [
-                    'error_data' => $error . ' :' . $e->getMessage(),
-                ]
-            );
-            throw new Exception($error);
+        if ($this->getPayableAmount() > 0) {
+            try {
+                User::decreaseBalance(
+                    userID: $this->user_id,
+                    transactionable: $this,
+                );
+            } catch (Throwable $e) {
+                $error = 'Failed to decrease user balanace';
+                Log::error($error, ['error' => $e->getMessage()]);
+                $this->changeInvoicePaymentStatus(
+                    fromStatus: PaymentStatus::Processing,
+                    toStatus: PaymentStatus::Failed,
+                    extraParams: [
+                        'error_data' => $error . ' :' . $e->getMessage(),
+                    ]
+                );
+                throw new Exception($error);
+            }
+            $this->debug('User balance is decreased');
+        } else {
+            $this->debug('Invoice is free');
         }
-        $this->debug('User balance is decreased');
 
         $this->changeInvoicePaymentStatus(
             fromStatus: PaymentStatus::Processing,

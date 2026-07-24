@@ -19,6 +19,10 @@ trait HasBalance
         TransactionableContract $transactionable,
         array $transactionParams = []
     ): Transaction {
+        if ($transactionable->getPayableAmount() <= 0) {
+            throw new InvalidArgumentException('Amount must be greater than zero');
+        }
+
         DB::beginTransaction();
 
         try {
@@ -62,20 +66,22 @@ trait HasBalance
         TransactionableContract $transactionable,
         array $transactionParams = []
     ): Transaction {
+        if ($transactionable->getPayableAmount() <= 0) {
+            throw new InvalidArgumentException('Amount must be greater than zero');
+        }
+
         DB::beginTransaction();
 
         try {
-            if ($transactionable->getPayableAmount() > 0) {
-                $affected = static::query()
-                    ->where('id', $userID)
-                    ->where('currency', $transactionable->getPayableCurrency())
-                    ->where('balance', '>=', $transactionable->getPayableAmount())
-                    ->update([
-                        'balance' => DB::raw('balance - ' . $transactionable->getPayableAmount()),
-                    ]);
-                if (!$affected) {
-                    throw new Exception('Insufficient balance or update failed');
-                }
+            $affected = static::query()
+                ->where('id', $userID)
+                ->where('currency', $transactionable->getPayableCurrency())
+                ->where('balance', '>=', $transactionable->getPayableAmount())
+                ->update([
+                    'balance' => DB::raw('balance - ' . $transactionable->getPayableAmount()),
+                ]);
+            if (!$affected) {
+                throw new Exception('Insufficient balance or update failed');
             }
 
             $transaction = new Transaction();

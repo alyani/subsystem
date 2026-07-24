@@ -108,7 +108,7 @@ class WithdrawalDataTable extends DataTable
             Column::make('DT_RowIndex')->title('#')->orderable(false),
             Column::make('user')->title(st('User nickname'))->orderable(false),
             Column::make('withdrawal_gateway')->title(st('Withdrawal gateway'))->orderable(false),
-            Column::make('amount')->title(st('Amount') . ' (' . st('IRT') . ')')->orderable(false),
+            Column::make('amount')->title(st('Amount'))->orderable(false),
             Column::make('description')->title(st('Description'))->orderable(false),
             Column::make('status')->title(st('Status'))->orderable(false),
             Column::make('manager')->title(st('Manager'))->orderable(false),

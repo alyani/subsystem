@@ -5,6 +5,8 @@
     @section('pageSubTitle', empty($user->name) ? $user->nickname : $user->name . ' ' . $user->family)
 @endif
 
+@section('IRTDescription', true)
+
 @section('formFields')
     <x-form.row>
         <x-form.input name="nickname" :value="$user->nickname ?? app('request')->input('nickname')" :placeholder="st('Nickname')" col="col-auto" />

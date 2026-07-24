@@ -402,4 +402,13 @@ class Payment extends Model implements TransactionableContract
         }
         return route('admin.payment.list', ['id' => $id]);
     }
+
+    /**
+     * The actual amount to Increase and Decrease from user's balance
+     * The amount must be without transaction_fee_amount
+     */
+    public function getPayableAmount(): int
+    {
+        return $this->base_amount;
+    }
 }

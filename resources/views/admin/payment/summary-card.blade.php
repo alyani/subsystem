@@ -15,21 +15,24 @@
             </div>
         </div>
         <hr>
-        <div class="row">
-            <div class="col-sm-3"><p class="mb-0">{{st('Base amount')}}</p></div>
-            <div class="col-sm-9 text-muted small text-start">
-                {{ number_format($payment->base_amount_exchanged) }} {{ $payment->currency->displayTranslate() }}
-            </div>
-        </div>
-        <hr>
 
-        <div class="row">
-            <div class="col-sm-3"><p class="mb-0">{{st('Transaction fee amount')}}</p></div>
-            <div class="col-sm-9 text-muted small text-start">
-                {{ number_format($payment->transaction_fee_amount_exchanged) }} {{ $payment->currency->displayTranslate() }}
+        @if($payment->transaction_fee_amount_exchanged > 0)
+            <div class="row">
+                <div class="col-sm-3"><p class="mb-0">{{st('Base amount')}}</p></div>
+                <div class="col-sm-9 text-muted small text-start">
+                    {{ number_format($payment->base_amount_exchanged) }} {{ $payment->currency->displayTranslate() }}
+                </div>
             </div>
-        </div>
-        <hr>
+            <hr>
+
+            <div class="row">
+                <div class="col-sm-3"><p class="mb-0">{{st('Transaction fee amount')}}</p></div>
+                <div class="col-sm-9 text-muted small text-start">
+                    {{ number_format($payment->transaction_fee_amount_exchanged) }} {{ $payment->currency->displayTranslate() }}
+                </div>
+            </div>
+            <hr>
+        @endif
 
         <div class="row">
             <div class="col-sm-3"><p class="mb-0">{{st('Final amount')}}</p></div>

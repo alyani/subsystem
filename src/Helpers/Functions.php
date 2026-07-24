@@ -368,3 +368,17 @@ if (!function_exists('getClientIP')) {
         }
     }
 }
+
+if (! function_exists('calculateVat')) {
+    /**
+     * Calculate VAT for the given amount.
+     *
+     * @param int $amount
+     * @param int $vat
+     * @return int
+     */
+    function calculateVat(int $amount, int $vat): int
+    {
+        return (int) floor($amount * ($vat / 100));
+    }
+}

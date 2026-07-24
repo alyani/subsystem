@@ -64,6 +64,12 @@ class PaymentDataTable extends DataTable
                 }
                 return $paymentGateway ?? '---';
             })
+            ->editColumn('base_amount', function ($model) {
+                return number_format(exchange($model->base_amount, $model->currency, $model->currency->display()));
+            })
+            ->editColumn('transaction_fee_amount', function ($model) {
+                return number_format(exchange($model->transaction_fee_amount, $model->currency, $model->currency->display()));
+            })
             ->editColumn('amount', function ($model) {
                 return number_format(exchange($model->amount, $model->currency, $model->currency->display()));
             })
@@ -112,6 +118,8 @@ class PaymentDataTable extends DataTable
                 'user_id',
                 'manager_id',
                 'payment_gateway_id',
+                'base_amount',
+                'transaction_fee_amount',
                 'amount',
                 'currency',
                 'status',
@@ -132,7 +140,9 @@ class PaymentDataTable extends DataTable
             Column::make('DT_RowIndex')->title('#')->orderable(false),
             Column::make('user')->title(st('User nickname'))->orderable(false),
             Column::make('payment_gateway')->title(st('Payment gateway'))->orderable(false),
-            Column::make('amount')->title(st('Amount') . ' (' . st('IRT') . ')')->orderable(false),
+            // Column::make('base_amount')->title(st('Base amount'))->orderable(false),
+            // Column::make('transaction_fee_amount')->title(st('Transaction fee amount'))->orderable(false),
+            Column::make('amount')->title(st('Amount'))->orderable(false),
             Column::make('description')->title(st('Description'))->orderable(false),
             Column::make('status')->title(st('Status'))->orderable(false),
             Column::make('gateway_reference')->title(st('Gateway reference'))->orderable(false),

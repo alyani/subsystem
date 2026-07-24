@@ -96,9 +96,9 @@ class TransactionDataTable extends DataTable
         $columns = [
             Column::make('DT_RowIndex')->title('#')->orderable(false),
             Column::make('user')->title(st('User nickname'))->orderable(false),
-            Column::make('base_amount')->title(st('Base amount') . ' (' . st('IRT') . ')')->orderable(false),
-            Column::make('VAT_amount')->title(st('VAT amount') . ' (' . st('IRT') . ')')->orderable(false),
-            Column::make('amount')->title(st('Amount') . ' (' . st('IRT') . ')')->orderable(false),
+            Column::make('base_amount')->title(st('Base amount'))->orderable(false),
+            Column::make('VAT_amount')->title(st('VAT amount'))->orderable(false),
+            Column::make('amount')->title(st('Amount'))->orderable(false),
             Column::make('description')->title(st('Description'))->orderable(false),
             Column::make('type')->title(st('Type'))->orderable(false),
             Column::make('created_at')->title(st('Created at'))->orderable(false),
