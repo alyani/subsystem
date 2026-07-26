@@ -59,6 +59,12 @@ Route::group(['prefix' => 'admin'], function () {
                 Route::post('/upload', 'upload')->name('heavy.upload');
                 Route::post('/delete', 'delete')->name('heavy.delete');
             });
+
+        Route::prefix('profile')->controller(ManagerController::class)
+            ->group(function () {
+                Route::get('edit', 'editProfile')->name('admin.profile.edit');
+                Route::post('update', 'updateProfile')->name('admin.profile.update');
+            });
     });
 
     // Admin authenticated + access routes

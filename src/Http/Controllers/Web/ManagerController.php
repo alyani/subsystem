@@ -6,6 +6,7 @@ use Alyani\Subsystem\DataTables\Manager\ManagerDataTable;
 use Alyani\Subsystem\Enums\ManagerStatus;
 use Alyani\Subsystem\Http\Requests\Admin\Manager\CreateManagerRequest;
 use Alyani\Subsystem\Http\Requests\Admin\Manager\UpdateManagerRequest;
+use Alyani\Subsystem\Http\Requests\Admin\Manager\UpdateProfileRequest;
 use Alyani\Subsystem\Models\Manager;
 use Alyani\Subsystem\Models\Storage;
 use Illuminate\Contracts\View\Factory;
@@ -60,7 +61,7 @@ class ManagerController extends Controller
         $data['password'] = Hash::make($data['password']);
 
         $role = Role::findOrFail($data['role_id']);
-    
+
         $storage = null;
         if (isset($data['avatar'])) {
             $storage = Storage::uploadFile(['file' => $data['avatar'], 'type' => 'image']);
@@ -143,5 +144,61 @@ class ManagerController extends Controller
         $manager->syncRoles($role);
 
         return redirect()->route('admin.manager.list')->with('success', st('Operation done successfully'));
+    }
+
+    /**
+     * @param Manager $manager
+     * @return Factory|View|Application|\Illuminate\View\View
+     */
+    public function editProfile()
+    {
+        $manager = auth()->user();
+        if ($manager->avatarSID) {
+            $manager->load('storage');
+            $manager->avatarSID = $manager->avatarSID . '.' . $manager->storage->extension ?? '';
+        }
+
+        return view('subsystem::admin.manager.create-edit-profile', [
+            'manager' => $manager,
+        ]);
+    }
+
+    /**
+     * @param Manager $manager
+     * @param UpdateManagerRequest $request
+     * @return RedirectResponse
+     */
+    public function updateProfile(UpdateProfileRequest $request)
+    {
+        $data = $request->validated();
+        $manager = auth()->user();
+
+        if (!empty($data['password'])) {
+            if (!Hash::check($data['currenct_password'], $manager->password)) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'currenct_password' => 'رمز عبور فعلی اشتباه است.'
+                    ]);
+            }
+            $data['password'] = Hash::make($data['password']);
+            unset($data['currenct_password']);
+        } else {
+            unset($data['currenct_password'], $data['password']);
+        }
+
+        $storage = null;
+        if (isset($data['avatar'])) {
+            Storage::deleteBySID($manager->avatarSID);
+            $storage = Storage::uploadFile(['file' => $data['avatar'], 'type' => 'image']);
+            $data['avatarSID'] = $storage->SID;
+            unset($data['avatar']);
+        }
+
+        $manager->fill($data);
+        $manager->save();
+        $storage?->used($manager, true);
+
+        return redirect()->route('dashboard')->with('success', st('Operation done successfully'));
     }
 }
