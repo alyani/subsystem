@@ -260,7 +260,7 @@ class Zarinpal extends BaseGatewayService
     public function paymentGatewayData(): array
     {
         return array_filter([
-            'verifyGatewayData' => $this->verifyGatewayData ? json_encode($this->verifyGatewayData, JSON_UNESCAPED_UNICODE) : '',
+            'verifyGatewayData' => $this->verifyGatewayData,
             'verifyCode' => $this->verifyCode,
             'verifyError' => $this->verifyError,
         ]);
