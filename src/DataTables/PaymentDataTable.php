@@ -79,6 +79,26 @@ class PaymentDataTable extends DataTable
             ->editColumn('gateway_reference', function ($model) {
                 return $this->optional($model->gateway_reference);
             })
+            ->editColumn('gateway_data', function ($model) {
+                if (empty($model->gateway_data) || $model->paymentGateway->name == 'manual') {
+                    return '';
+                }
+
+                $json = json_encode(
+                    $model->gateway_data,
+                    JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+                );
+
+                return '
+                    <button
+                        class="btn btn-sm btn-outline-primary show-content"
+                        data-type="json"
+                        data-title="پارامترهای درگاه"
+                        data-content=\'' . e($json) . '\'>
+                        مشاهده
+                    </button>
+                ';
+            })
             ->editColumn('payment_date', function ($model) {
                 $date = $model->payment_date ? $this->parseDate($model->payment_date, 'Y-m-d H:i:s') : '---';
                 return  "<div class='left-to-right'>$date</div>";
@@ -98,7 +118,7 @@ class PaymentDataTable extends DataTable
             // ->addColumn('show', function ($model) {
             //     return $this->actionShow(route('admin.payment.show', $model->id));
             // })
-            ->rawColumns(['show', 'user', 'payment_gateway', 'description', 'payment_date'])
+            ->rawColumns(['show', 'user', 'payment_gateway', 'gateway_data', 'description', 'payment_date'])
             ->setTotalRecords($query->count())
             ->addIndexColumn()
             ->orderColumn('id', ':column $1')
@@ -146,6 +166,7 @@ class PaymentDataTable extends DataTable
             Column::make('description')->title(st('Description'))->orderable(false),
             Column::make('status')->title(st('Status'))->orderable(false),
             Column::make('gateway_reference')->title(st('Gateway reference'))->orderable(false),
+            Column::make('gateway_data')->title('پارامترهای درگاه')->orderable(false),
             Column::make('manager')->title(st('Manager'))->orderable(false),
             Column::make('payment_date')->title(st('Paid at'))->orderable(false),
             // Column::make('show')->title(st('Show'))->orderable(false),
