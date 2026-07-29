@@ -213,6 +213,10 @@ class AuthController extends Controller
             return $this->error(2, st('No account found with these details.'));
         }
 
+        if (empty($userOTPInfo['password'])) {
+            return $this->error(4, st('Something went wrong. Please try again.'));
+        }
+
         $user->password = Hash::make($userOTPInfo['password']);
         $user->save();
 

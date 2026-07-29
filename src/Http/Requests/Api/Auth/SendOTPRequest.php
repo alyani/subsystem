@@ -31,7 +31,7 @@ class SendOTPRequest extends ApiRequest
                 'register',
                 'resetPassword',
             ]),
-            'password' => ['required_if:action,register', 'min:8', 'max:32'],
+            'password' => ['required', 'min:8', 'max:32'],
             'name' => ['exclude_unless:action,register', 'nullable', 'string', 'max:255'],
             'family' => ['exclude_unless:action,register', 'nullable', 'string', 'max:255'],
             'nickname' => ['exclude_unless:action,register', 'nullable', 'string', 'max:255'],
