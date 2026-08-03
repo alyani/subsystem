@@ -46,7 +46,7 @@ class StorageController extends Controller
 
         return StorageSupport::disk('public')->response(
             $pathFile,
-            $storage->SID . '.' . $storage->extension,
+            $storage->fileName . '.' . $storage->extension,
             array_merge($cacheHeaders, $corsHeaders)
         );
     }
