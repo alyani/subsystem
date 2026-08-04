@@ -47,4 +47,26 @@ class PaymentGateway extends Model
             })
             ->toArray();
     }
+
+    public static function getChartLabels($ids = [])
+    {
+        return static::select('id', 'title', 'status')
+            ->where(function ($query) use ($ids) {
+                $query->where('status', ActivationStatus::Active)
+                    ->orWhereIn('id', $ids);
+            })
+            ->orderBy('id', 'asc')
+            ->get()
+            ->map(function ($item) {
+                $title = $item->title[config('app.locale')] ?? urrent($item->title);
+                if ($item->status == ActivationStatus::Inactive) {
+                    $title .= ' «' . st('Inactive') . '»';
+                }
+                return [
+                    'key' => $item->id,
+                    'label' => $title
+                ];
+            })
+            ->toArray();
+    }
 }
