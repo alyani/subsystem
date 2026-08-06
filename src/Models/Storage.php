@@ -127,37 +127,70 @@ class Storage extends Model
 
         StorageSupport::disk('public')->move($tempFilePath, $newFilePath);
 
-        
-        // Log::info([
-        //     'exists' => StorageSupport::disk('public')->exists($newFilePath),
-        //     'path' => StorageSupport::disk('public')->path($newFilePath),
-        // ]);
-
         // Thumbnail
-        if ($this->fileType == 'image' && StorageSupport::disk('public')->exists($newFilePath)) {
+        if (in_array($this->fileType, ['image', 'video']) && StorageSupport::disk('public')->exists($newFilePath)) {
             try {
-                $configThumbnail = Config::get('subsystem.storage.image.thumbnail', []);
+                $configThumbnail = Config::get("subsystem.storage.{$this->fileType}.thumbnail", []);
 
-                if (
-                    !empty($configThumbnail) &&
-                    $this->height > $configThumbnail['height'] && $this->width > $configThumbnail['width']
-                ) {
-                    $image = StorageSupport::disk('public')->path($newFilePath);
-
-                    
-                    $manager = new ImageManager(new Driver());
-                    $img = $manager->read($image);
-                    $img = $img->resize($configThumbnail['width'], $configThumbnail['height']);
+                if (!empty($configThumbnail)) {
                     $pathThumbnail = $destinationPath . $configThumbnail['pathThumbnail'];
 
                     StorageSupport::disk('public')->makeDirectory($pathThumbnail);
 
-                    StorageSupport::disk('public')->put(
-                        $pathThumbnail . '/' . $this->SID,
-                        (string) $img->toWebp(
-                            Config::get('subsystem.storage.image.thumbnailConversionQuality')
-                        )
-                    );
+                    if ($this->fileType == 'image') {
+                        if (
+                            $this->height > $configThumbnail['height'] &&
+                            $this->width > $configThumbnail['width']
+                        ) {
+                            $image = StorageSupport::disk('public')->path($newFilePath);
+
+                            $manager = new ImageManager(new Driver());
+                            $img = $manager->read($image);
+                            $img = $img->resize($configThumbnail['width'], $configThumbnail['height']);
+
+                            StorageSupport::disk('public')->put(
+                                $pathThumbnail . '/' . $this->SID,
+                                (string) $img->toWebp(
+                                    Config::get('subsystem.storage.image.thumbnailConversionQuality')
+                                )
+                            );
+                        }
+                    } else {
+                        $video = StorageSupport::disk('public')->path($newFilePath);
+                        $tempThumbnail = rtrim(sys_get_temp_dir(), '/') . '/' . $this->SID . '.' . ($configThumbnail['ext'] ?? 'jpg');
+
+                        $ffmpeg = env('FFMPEG_PATH', '/usr/bin/ffmpeg');
+                        exec(
+                            $ffmpeg . ' -y -ss 00:00:01 -i ' . escapeshellarg($video) .
+                            ' -frames:v 1 -update 1 ' . escapeshellarg($tempThumbnail) . ' 2>&1',
+                            $output,
+                            $returnCode
+                        );
+
+                        if (file_exists($tempThumbnail)) {
+                            $manager = new ImageManager(new Driver());
+                            $img = $manager->read($tempThumbnail);
+                            // $img->resize($configThumbnail['width'], $configThumbnail['height']);
+                            // $img->cover(
+                            //     $configThumbnail['width'],
+                            //     $configThumbnail['height']
+                            // );
+
+                            $img->scaleDown(
+                                width: $configThumbnail['width'],
+                                height: $configThumbnail['height']
+                            );
+
+                            StorageSupport::disk('public')->put(
+                                $pathThumbnail . '/' . $this->SID,
+                                (string) $img->toWebp(
+                                    Config::get('subsystem.storage.video.thumbnailConversionQuality')
+                                )
+                            );
+
+                            @unlink($tempThumbnail);
+                        }
+                    }
                 }
             } catch (Throwable $e) {
                 Log::error('Thumbnail generation failed', [
@@ -342,10 +375,10 @@ class Storage extends Model
 
         $path = [$basePath . $fileName];
 
-        // Add image's thumbnail path to path array
-        if ($storage->fileType == 'image') {
-            $thumbnailsFolder = Config::get('subsystem.storage.image.thumbnail.pathThumbnail');
-            $path[] = $basePath . $thumbnailsFolder . $fileName;
+        // Add thumbnail path to path array
+        $configThumbnail = Config::get("subsystem.storage.{$storage->fileType}.thumbnail", []);
+        if (!empty($configThumbnail)) {
+            $path[] = $basePath . $configThumbnail['pathThumbnail'] . $fileName;
         }
 
         return $path;
@@ -357,5 +390,130 @@ class Storage extends Model
         $fileType = $isThumbnail ? 'thumbnail' : 'original';
 
         return $appUrl . "storage/{$fileType}/" . $storage->SID . '.' . $storage->extension;
+    }
+
+    public function generateThumbnail(): bool
+    {
+        if (!in_array($this->fileType, ['image', 'video'])) {
+            return false;
+        }
+
+        $disk = StorageSupport::disk('public');
+        $newFilePath = static::getStoragePath($this)[0] ?? '';
+
+        if (!$disk->exists($newFilePath)) {
+            return false;
+        }
+
+        try {
+            $configThumbnail = Config::get(
+                "subsystem.storage.{$this->fileType}.thumbnail",
+                []
+            );
+
+            if (empty($configThumbnail)) {
+                return false;
+            }
+
+            $destinationPath = dirname($newFilePath) . '/';
+            $pathThumbnail = $destinationPath . $configThumbnail['pathThumbnail'];
+            $disk->makeDirectory($pathThumbnail);
+            $thumbnailPath = rtrim($pathThumbnail, '/') . '/' . $this->SID;
+            if ($disk->exists($thumbnailPath)) {
+                return true;
+            }
+
+            if ($this->fileType == 'image') {
+                $image = $disk->path($newFilePath);
+
+                $manager = new ImageManager(new Driver());
+                $img = $manager->read($image);
+
+                $img->scaleDown(
+                    width: $configThumbnail['width'],
+                    height: $configThumbnail['height']
+                );
+
+                $disk->put(
+                    $thumbnailPath,
+                    (string) $img->toWebp(
+                        Config::get(
+                            'subsystem.storage.image.thumbnailConversionQuality',
+                            80
+                        )
+                    )
+                );
+
+                return true;
+            }
+
+            // Video
+            $video = $disk->path($newFilePath);
+            $tempThumbnail = rtrim(sys_get_temp_dir(), '/')
+                . '/' . $this->SID
+                . '.' . ($configThumbnail['ext'] ?? 'jpg');
+
+            $ffmpeg = env('FFMPEG_PATH', '/usr/bin/ffmpeg');
+            exec(
+                escapeshellarg($ffmpeg)
+                . ' -y -ss 00:00:01 -i ' . escapeshellarg($video)
+                . ' -frames:v 1 -update 1 '
+                . escapeshellarg($tempThumbnail)
+                . ' 2>&1',
+                $output,
+                $returnCode
+            );
+
+            if (
+                $returnCode !== 0 ||
+                !file_exists($tempThumbnail)
+            ) {
+                Log::error('Video thumbnail generation failed', [
+                    'storage_id' => $this->id,
+                    'sid' => $this->SID,
+                    'path' => $newFilePath,
+                    'output' => $output ?? [],
+                    'return_code' => $returnCode,
+                ]);
+
+                return false;
+            }
+
+            try {
+                $manager = new ImageManager(new Driver());
+                $img = $manager->read($tempThumbnail);
+
+                $img->scaleDown(
+                    width: $configThumbnail['width'],
+                    height: $configThumbnail['height']
+                );
+                $disk->put(
+                    $thumbnailPath,
+                    (string) $img->toWebp(
+                        Config::get(
+                            'subsystem.storage.video.thumbnailConversionQuality',
+                            80
+                        )
+                    )
+                );
+            } finally {
+                @unlink($tempThumbnail);
+            }
+
+            return true;
+        } catch (Throwable $e) {
+            Log::error('Thumbnail generation failed', [
+                'storage_id' => $this->id,
+                'sid' => $this->SID,
+                'path' => $newFilePath,
+                'mime' => $this->mimeType,
+                'extension' => $this->extension,
+                'size' => $this->fileSize,
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+            ]);
+
+            return false;
+        }
     }
 }

@@ -66,12 +66,15 @@ class StorageController extends Controller
             return false;
         }
 
-        $thumbnailDir = Config::get('subsystem.storage.image.thumbnail.pathThumbnail', false);
+        $thumbnailDir = Config::get("subsystem.storage.{$storage->fileType}.thumbnail.pathThumbnail", false);
         if (!$isThumbnail || empty($thumbnailDir)) {
             return $baseFilePath;
         }
 
         $thumbnailPath = "{$modelFolder}/" . ($storage->additionalPath ?? '') . "{$thumbnailDir}/{$storage->SID}";
+        if (!$this->fileExists($thumbnailPath)) {
+            $storage->generateThumbnail();
+        }
         return $this->fileExists($thumbnailPath) ? $thumbnailPath : $baseFilePath;
     }
 }

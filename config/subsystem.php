@@ -59,6 +59,14 @@ return [
                 'max:1048576', // 1GB
                 'mimes:mp4,avi,mpeg,mov',
             ],
+            'originalConversionQuality' => 70,
+            'thumbnailConversionQuality' => 70,
+            'thumbnail' => [
+                'width' => 300,
+                'height' => 300,
+                'pathThumbnail' => 'thumbnails/',
+                'ext' => 'jpg',
+            ],
         ],
     ],
 
