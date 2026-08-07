@@ -44,7 +44,7 @@ class UpdateManagerRequest extends WebRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'mobile' => normalizeMobile(ltrim($this->mobile, 0)),
+            'mobile' => normalizeMobile(ltrim($this->mobile, 0), 98),
             'name' => trim($this->name),
             'family' => trim($this->family),
         ]);

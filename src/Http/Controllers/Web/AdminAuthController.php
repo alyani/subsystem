@@ -32,6 +32,13 @@ class AdminAuthController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
+        logger()->info('LOGIN SESSION', [
+            'id' => $request->session()->getId(),
+            'user_id' => auth()->id(),
+            'csrf' => $request->session()->token(),
+        ]);
+
+
         return redirect()->route('dashboard');
     }
 

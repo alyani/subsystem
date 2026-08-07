@@ -7,7 +7,7 @@
     <x-form.card>
         <x-form.row>
             <x-form.input name="name" :label="st('Name')" :value="old('name', $manager->name)" required />
-            <x-form.input name="mobile" :label="st('Mobile')" :value="old('mobile', $manager->mobile)" class="mobile-input" required/>
+            <x-form.input name="mobile" :label="st('Mobile')" :value="old('mobile', $manager->mobile)" class="mobile-input" required is_mobile=true/>
         </x-form.row>
 
         <x-form.row>
